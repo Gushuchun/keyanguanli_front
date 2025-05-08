@@ -1,0 +1,178 @@
+/* src/assets/css/main.css (或 theme.css) */
+
+/* 1. 定义 @font-face (如果还没有) */
+@font-face {
+    font-family: 'AlimamaShuHeiTi-Bold'; /* 您为这个字体指定的名称 */
+    src: url('@/assets/fonts/AlimamaShuHeiTi-Bold.woff2') format('woff2'),
+         url('@/assets/fonts/AlimamaShuHeiTi-Bold.woff') format('woff'),
+         url('@/assets/fonts/AlimamaShuHeiTi-Bold.ttf') format('truetype'),
+         url('@/assets/fonts/AlimamaShuHeiTi-Bold.otf') format('opentype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+  }
+  
+  /* (可选) 定义 DS-Digital 字体，如果您有这个字体文件并想在本地使用 */
+  /* @font-face {
+    font-family: 'DS-Digital';
+    src: url('@/assets/fonts/DS-DIGIB.TTF') format('truetype'); // 假设您有这个文件
+    font-weight: bold;
+    font-style: normal;
+  } */
+  
+  
+  /* 2. 定义 CSS 变量 */
+  
+  /* :root 或 html.light-theme 定义白天模式的变量 (默认值) */
+  :root, html.light-theme {
+    --navbar-bg: #ffffff;
+    --navbar-text-color: #333;
+    --navbar-brand-text-color: #2c3e50;
+    --time-display-bg: #f8f9fa;
+    --time-display-text-color: #333; /* 时间显示区域内的文字颜色 */
+    --icon-clock-color: #007bff;
+    --time-segment-color: #343a40; /* 数字的颜色 */
+    --date-char-color: #495057; /* 年月日汉字和星期文本的颜色 */
+    --time-separator-color: #6c757d;
+    --date-separator-color: #ced4da;
+    --theme-button-border-color: #ccc;
+    --theme-button-hover-bg: #e9ecef;
+    --theme-icon-filter: none; /* 白天模式下图标不过滤 */
+    --nav-link-text-color: #4a5568;
+    --nav-link-hover-bg: #e9edf2;
+    --nav-link-hover-text-color: #2d3748;
+    --nav-link-active-bg: #007bff;
+    --nav-link-active-text-color: #ffffff;
+    --action-button-text-color: #007bff;
+    --action-button-hover-bg: rgba(0, 123, 255, 0.1);
+    --action-button-hover-text-color: #0056b3;
+    --navbar-border-color: #007bff;
+    --collapse-button-bg: #ffffff;
+    --collapse-button-border-color: #007bff;
+    --collapse-arrow-color: #007bff;
+    --primary-button-bg: #007bff;
+    --primary-button-text: #ffffff;
+    --secondary-button-bg: #6c757d;
+    --secondary-button-text: #ffffff;
+    
+  
+    /* 应用到其他全局元素的变量 */
+    --body-bg: #f0f2f5; /* 页面背景色 */
+    --text-color: #212529; /* 主要文字颜色 */
+    --card-bg: #ffffff; /* 卡片等组件背景色 */
+    --border-color: #dee2e6; /* 边框颜色 */
+    --link-color: #007bff;
+  }
+  
+  /* html.dark-theme 定义暗黑模式下的变量覆盖 */
+  html.dark-theme {
+    --navbar-bg: #2d3748;
+    --navbar-text-color: #e2e8f0;
+    --navbar-brand-text-color: #cbd5e1;
+    --time-display-bg: #1a202c;
+    --time-display-text-color: #e2e8f0;
+    --icon-clock-color: #63b3ed;
+    --time-segment-color: #e2e8f0;
+    --date-char-color: #a0aec0;
+    --time-separator-color: #718096;
+    --date-separator-color: #4a5568;
+    --theme-button-border-color: #4a5568;
+    --theme-button-hover-bg: #4a5568;
+    /* 对于暗色背景下的亮色图标，可能不需要反转。
+       如果您的 theme_dark.png 和 theme_light.png 本身就适合对应的主题，则无需 filter。
+       如果您的图标是纯黑/白，需要反转以适应背景，可以使用 filter。*/
+    /* --theme-icon-filter: invert(1) hue-rotate(180deg); */
+    --nav-link-text-color: #cbd5e1;
+    --nav-link-hover-bg: #4a5568;
+    --nav-link-hover-text-color: #ffffff;
+    --nav-link-active-bg: #63b3ed;
+    --nav-link-active-text-color: #1a202c;
+    --action-button-text-color: #63b3ed;
+    --action-button-hover-bg: rgba(99, 179, 237, 0.1);
+    --action-button-hover-text-color: #90cdf4;
+    --navbar-border-color: #63b3ed;
+    --collapse-button-bg: #2d3748;
+    --collapse-button-border-color: #63b3ed;
+    --collapse-arrow-color: #63b3ed;
+    --primary-button-bg: #63b3ed;
+    --primary-button-text: #1a202c;
+    --secondary-button-bg: #718096;
+    --secondary-button-text: #e2e8f0;
+  
+    /* 其他全局元素的暗黑模式变量 */
+    --body-bg: #1a202c;
+    --text-color: #e2e8f0;
+    --card-bg: #2d3748;
+    --border-color: #4a5568;
+    --link-color: #63b3ed; /* 暗黑模式下的链接颜色 */
+  }
+
+  .sample-card button {
+    margin-right: 10px;
+    margin-top: 10px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease; /* 添加过渡效果 */
+  }
+  
+  .sample-card button.primary {
+    background-color: var(--primary-button-bg);
+    color: var(--primary-button-text);
+  }
+  
+  .sample-card button.secondary {
+    background-color: var(--secondary-button-bg);
+    color: var(--secondary-button-text);
+  }
+  
+  /* 添加悬停效果 */
+  .sample-card button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+  }
+  
+  /* 3. 应用变量到全局 HTML 元素 */
+  body {
+    background-color: var(--body-bg);
+    color: var(--text-color);
+    transition: background-color 0.3s, color 0.3s; /* 平滑过渡效果 */
+    margin: 0; /* 移除默认的 body margin */
+    font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif; /* 全局默认字体 */
+  }
+  
+  a {
+    color: var(--link-color);
+    text-decoration: none;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+
+  button {
+    color: var(--text-color); /* 使用全局文字颜色变量 */
+    background: transparent;
+    border: 1px solid var(--text-color);
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+  
+  button:hover {
+    background-color: var(--nav-link-hover-bg);
+  }
+  
+  /* 您可以继续为其他常用HTML元素或组件类定义基于CSS变量的样式 */
+  /* 例如：
+  h1, h2, h3 {
+    color: var(--text-color);
+  }
+  button {
+    background-color: var(--button-bg, var(--action-button-text-color));
+    color: var(--button-text-color, #ffffff);
+    border: 1px solid var(--button-border-color, transparent);
+  }
+  */
+  
