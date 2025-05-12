@@ -27,19 +27,25 @@
 
       <div class="navbar-section navbar-links-section">
         <template v-if="isUserLoggedIn && userRole">
-          <router-link v-if="userRole === 'student' || userRole === '队长'" to="/student/team" class="nav-link">
+          <router-link v-if="userRole === 'student' || userRole === '队长'" to="/myteam" class="nav-link">
             <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="团队" class="nav-icon-img" /> 我的团队
           </router-link>
-          <router-link v-if="userRole === 'student' || userRole === '队长'" to="/student/competition" class="nav-link">
+          <router-link v-if="userRole === 'student' || userRole === '队长'" to="/mycompetition" class="nav-link">
             <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="比赛" class="nav-icon-img" /> 我的比赛
           </router-link>
 
-          <router-link v-if="userRole === 'teacher'" to="/teacher/team" class="nav-link">
-            <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="指导" class="nav-icon-img" /> 指导团队
+          <router-link v-if="userRole === 'teacher'" to="/myteam" class="nav-link">
+            <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="团队" class="nav-icon-img" /> 我的团队
           </router-link>
-          <router-link v-if="userRole === 'teacher'" to="/teacher/competition" class="nav-link">
-            <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="比赛" class="nav-icon-img" /> 相关比赛
+          <router-link v-if="userRole === 'teacher'" to="/mycompetition" class="nav-link">
+            <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="比赛" class="nav-icon-img" /> 我的比赛
           </router-link>
+          <router-link v-if="userRole === 'teacher'" to="/teacher/competition1" class="nav-link">
+            <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="论文" class="nav-icon-img" /> 我的论文
+          </router-link>
+          <!-- <router-link v-if="userRole === 'teacher'" to="/teacher/competition2" class="nav-link">
+            <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="专利" class="nav-icon-img" /> 我的专利
+          </router-link> -->
         </template>
       </div>
 
@@ -83,7 +89,7 @@ import axios from 'axios'
 // 导入图片路径，以便在模板中动态绑定
 import iconButtonLightPath from '@/assets/image/icon_button.png';
 import iconButtonDarkPath from '@/assets/image/icon_button_dark.png';
-
+import { infoAPI } from '@/api/info';
 import dayjs from 'dayjs'
 
 // 时间日期数据
@@ -97,7 +103,7 @@ const weatherData = ref({})
 // 获取天气数据
 const getWeather = async () => {
   try {
-    const response = await axios.get('http://gfeljm.tianqiapi.com/api', {
+    const response = await axios.get('http://gfeljm.tianqiapi.com/api1', {
       params: {
         appid: '23562228',
         appsecret: 'eFu7G5yq',
@@ -148,12 +154,7 @@ const toggleNavbarCollapse = () => {
 
 const profileLink = computed(() => {
   if (!isUserLoggedIn.value) return '/login';
-  if (userRole.value === 'student' || userRole.value === '队长') {
-    return '/student/profile';
-  } else if (userRole.value === 'teacher') {
-    return '/teacher/profile';
-  }
-  return `/${userRole.value || 'user'}/profile`;
+  return '/myinfo';
 });
 
 
@@ -166,7 +167,7 @@ const fetchUserAvatar = async () => {
   }
   let apiUrl = '';
   if (userRole.value === 'student') {
-    apiUrl = 'http://127.0.0.1:8105/api/student/info/update_avatar/';
+    apiUrl = 'http://127.0.0.1:8105/api/student/info/get_avatar/';
   } else if (userRole.value === 'teacher') {
     apiUrl = 'http://127.0.0.1:8105/api/teacher/info/get_avatar/';
   } else {
@@ -198,7 +199,7 @@ onMounted(() => {
   getWeather();
   updateTime();
   timer.value = setInterval(updateTime, 1000)
-  timer.value = setInterval(getWeather, 1000 * 60 * 120)
+  // timer.value = setInterval(getWeather, 1000 * 60 * 120)
   fetchUserAvatar();
 });
 
@@ -214,6 +215,7 @@ const handleLogout = () => {
 };
 
 const handleThemeToggle = () => {
+  location.reload();
   themeStore.toggleTheme();
 };
 
@@ -227,14 +229,53 @@ const themeButtonTitle = computed(() => {
 <style scoped>
 /* 导航栏基础样式，使用CSS变量以便主题化 */
 .navbar-enhanced {
+  /* overflow: hidden; */
   background-color: var(--navbar-bg, #ffffff);
   color: var(--navbar-text-color, #333);
   font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
   position: sticky;
   top: 0;
-  z-index: 1000;
+  z-index: 999;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0,0,0,0.08);
   transition: height 0.3s ease-in-out, padding-bottom 0.3s ease-in-out, background-color 0.3s, color 0.3s;
+  border: 3px solid transparent; /* 为光效留出空间 */
+  border-radius: 20px; /* 设置四个角为圆形 */
+}
+
+.navbar-enhanced::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: -2px;
+  width: calc(100% + 4px);
+  height: calc(100% + 4px);
+  background: linear-gradient(
+    90deg,
+    transparent 25%,
+    #00f2fe,
+    #66f9ff,
+    #aaf8ff,
+    #7dfaff,
+    #00f2fe,
+    transparent 75%
+  );
+  background-size: 200% 200%;
+  animation: borderMove 4s linear infinite;
+  z-index: -1;
+  border-radius: 8px;
+  box-shadow:
+    0 0 6px #00f2fe,
+    0 0 12px #66f9ff,
+    0 0 18px #aaf8ff;
+}
+
+@keyframes borderMove {
+  0% {
+    background-position: 0% 0%;
+  }
+  100% {
+    background-position: 200% 0%;
+  }
 }
 
 .navbar-content-wrapper {
@@ -254,6 +295,7 @@ const themeButtonTitle = computed(() => {
   padding-top: 0;
   padding-bottom: 0;
 }
+
 .navbar-enhanced.collapsed {
    min-height: 12px;
 }
@@ -338,7 +380,6 @@ const themeButtonTitle = computed(() => {
   width: 80px;
 }
 
-
 .time-separator {
   font-size: 18px;
   font-weight: bold;
@@ -393,32 +434,48 @@ const themeButtonTitle = computed(() => {
 .navbar-links-section {
   flex-grow: 1;
   justify-content: center;
-  gap: 15px;
+  gap: 4px;
   transition: opacity 0.2s ease-out;
+  overflow-x: hidden;
+  white-space: nowrap;
 }
-.navbar-enhanced.collapsed .navbar-links-section {
-  opacity: 0;
-  pointer-events: none;
+
+.navbar-links-section:hover {
+  overflow-x: auto;
 }
 
 .nav-link, .nav-button {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   text-decoration: none;
   color: var(--nav-link-text-color, #4a5568);
-  padding: 10px 15px;
+  padding: 10px 8px;
   border-radius: 6px;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 500;
   transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+  flex: 0 0 auto;
+  min-width: max-content;
 }
 .nav-link:hover, .nav-button:hover:not(.theme-toggle-button) {
   background-color: var(--nav-link-hover-bg, #e9edf2);
   color: var(--nav-link-hover-text-color, #2d3748);
 }
+
 .nav-link.router-link-exact-active {
-  color: var(--nav-link-active-text-color, #ffffff);
-  box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+  position: relative;
+  color: inherit !important;
+}
+
+.nav-link.router-link-exact-active::after {
+  content: '';
+  position: absolute;
+  bottom: 2px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60%;
+  height: 2px;
+  background: var(--nav-link-active-bg, #007bff);
 }
 
 .logout-icon-img {
@@ -496,4 +553,7 @@ const themeButtonTitle = computed(() => {
   line-height: 1;
   transition: transform 0.3s ease-in-out;
 }
+
+
+
 </style>

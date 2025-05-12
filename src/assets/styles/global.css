@@ -1,0 +1,32 @@
+:root {
+  --page-bg: radial-gradient(ellipse at bottom, #0d1d31 0%, #0c0d13 100%);
+  --card-bg: rgba(13, 29, 49, 0.8);
+  --item-bg: rgba(138, 233, 255, 0.1);
+  --text-color: #8ae9ff;
+  --neon-blue: #00f7ff;
+  --neon-blue-shadow: rgba(0, 247, 255, 0.8);
+}
+
+[data-theme="light"] {
+  --page-bg: radial-gradient(ellipse at bottom, #f0f0f0 0%, #ffffff 100%);
+  --card-bg: rgba(255, 255, 255, 0.9);
+  --item-bg: rgba(200, 200, 200, 0.1);
+  --text-color: #333333;
+  --neon-blue: #007bff;
+  --neon-blue-shadow: rgba(0, 123, 255, 0.8);
+}
+
+/* 隐藏 Chrome、Safari 和 Opera 的滚动条 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* 隐藏 Internet Explorer 和 Edge 的滚动条 */
+* {
+  -ms-overflow-style: none;
+}
+
+/* 隐藏 Firefox 的滚动条 */
+html {
+  scrollbar-width: none;
+}

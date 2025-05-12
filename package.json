@@ -10,15 +10,25 @@
   },
   "dependencies": {
     "@element-plus/icons-vue": "^2.3.1",
+    "@vueuse/core": "^13.1.0",
+    "@vueuse/motion": "^3.0.3",
     "axios": "^1.9.0",
     "dayjs": "^1.11.13",
+    "echarts": "^5.6.0",
     "element-plus": "^2.9.9",
+    "gsap": "^3.13.0",
+    "lottie-web": "^5.12.2",
     "pinia": "^2.1.7",
     "vue": "^3.4.21",
     "vue-router": "^4.3.0"
   },
   "devDependencies": {
+    "@inspira-ui/plugins": "^0.0.1",
     "@vitejs/plugin-vue": "^5.0.4",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "tailwind-merge": "^3.3.0",
+    "tailwindcss-animate": "^1.0.7",
     "vite": "^5.2.8",
     "vite-plugin-vue-devtools": "^7.0.25",
     "vite-plugin-vue-setup-extend": "^0.4.0"

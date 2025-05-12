@@ -1,5 +1,6 @@
 <template>
   <div class="app-container">
+    <CursorEffect v-if="!isLoginPage" />
     <navbar v-if="!isLoginPage" />
     <div class="content-wrapper">
       <RouterView />
@@ -11,6 +12,7 @@
 import { useRoute } from 'vue-router';
 import { ref, computed } from 'vue';
 import navbar from '@/components/navbar.vue';
+import CursorEffect from '@/components/cursoreffect.vue'
 
 const route = useRoute();
 const isLoginPage = computed(() => {
@@ -19,6 +21,10 @@ const isLoginPage = computed(() => {
 </script>
 
 <style scoped>
+*{
+  margin: 0;
+  padding: 0;
+}
 .app-container {
   display: flex;
   flex-direction: column;

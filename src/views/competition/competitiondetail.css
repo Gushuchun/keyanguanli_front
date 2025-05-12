@@ -1,0 +1,7 @@
+:root {
+  --text-color: #000; /* 白天模式字体颜色 */
+}
+
+.dark {
+  --text-color: #fff; /* 暗夜模式字体颜色 */
+}

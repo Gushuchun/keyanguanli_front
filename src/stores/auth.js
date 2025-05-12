@@ -22,7 +22,9 @@ export const useAuthStore = defineStore('auth', {
           localStorage.setItem('user', JSON.stringify({
             user_id: res.data.user_id,
             username: res.data.username,
-            role: res.data.role
+            role: res.data.role,
+            id: res.data.id,
+            sn: res.data.sn
           }));
           return res.data; // 成功登录
         } else {

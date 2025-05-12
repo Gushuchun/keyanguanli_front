@@ -8,7 +8,6 @@ export const useThemeStore = defineStore('theme', () => {
 
   // 2. 应用主题到 HTML 文档根元素
   const applyTheme = (theme) => {
-    console.log('applyTheme', theme);
     if (theme === 'dark') {
       document.documentElement.classList.add('dark-theme');
       document.documentElement.classList.remove('light-theme');
