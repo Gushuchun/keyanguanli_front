@@ -1,7 +1,9 @@
 <template>
   <div class="page-container">
-    <div class="stars"></div>
+    <!-- <div class="stars"></div>
     <div class="meteor"></div>
+    <div class="meteor"></div>
+    <div class="meteor"></div> -->
     <div class="scroll-container">
       <div ref="page1" class="page active">
         <div class="main-content">
@@ -106,7 +108,8 @@ const fetchLatestCompetitions = async () => {
   try {
     const response = await infoAPI.getallcompetition();
     // 过滤出status为confirmed的数据，并按日期排序，取最新3条
-    latestCompetitions.value = response.data.results
+    console.log(response.data)
+    latestCompetitions.value = response.data
       .filter(item => item.status === 'confirmed')
       .sort((a, b) => new Date(b.date) - new Date(a.date))
       .slice(0, 3);
@@ -480,7 +483,7 @@ const switchPage = (targetPage) => {
   color: #00f7ff;
   font-size: 1.8rem;
   text-shadow: 0 0 10px rgba(0, 247, 255, 0.8);
-  margin-top: 5rem; /* 从5rem减少到3rem */
+  margin-top: 8rem; /* 从5rem减少到3rem */
   margin-bottom: 1rem; /* 从1.5rem减少到1rem */
   text-align: center;
 }
@@ -592,8 +595,7 @@ const switchPage = (targetPage) => {
   z-index: 0;
 }
 
-.meteor::before,
-.meteor::after {
+.meteor::before, .meteor::after {
   content: '';
   position: absolute;
   top: -50px;
@@ -612,6 +614,27 @@ const switchPage = (targetPage) => {
 .meteor::after {
   left: 80%;
   animation-delay: 7s;
+}
+
+/* 新增不同位置的流星 */
+.meteor:nth-child(2)::before {
+  left: 40%;
+  animation-delay: 5s;
+}
+
+.meteor:nth-child(2)::after {
+  left: 60%;
+  animation-delay: 9s;
+}
+
+.meteor:nth-child(3)::before {
+  left: 10%;
+  animation-delay: 1s;
+}
+
+.meteor:nth-child(3)::after {
+  left: 90%;
+  animation-delay: 11s;
 }
 
 @keyframes meteor {

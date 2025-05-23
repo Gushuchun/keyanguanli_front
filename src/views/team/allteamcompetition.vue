@@ -1,5 +1,5 @@
 <template>
-  <div class="all-team-competition" :class="{ 'dark-mode': isDarkMode }">
+  <div class="all-team-competition" >
     <h1 class="neon-title">所有团队获奖次数</h1>
     <div ref="chartContainer" class="chart-container"></div>
   </div>
@@ -271,17 +271,6 @@ onBeforeUnmount(() => {
   text-shadow: 0 0 10px;
   text-align: center;
   margin-bottom: 20px;
-  transition: color 0.3s;
-}
-
-.dark-mode .neon-title {
-  color: #00f2fe;
-  text-shadow: 0 0 10px #00f2fe, 0 0 20px #00f2fe, 0 0 30px #00f2fe;
-}
-
-:not(.dark-mode) .neon-title {
-  color: #333333;
-  text-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .chart-container {

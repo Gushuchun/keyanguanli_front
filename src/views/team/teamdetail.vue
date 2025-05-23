@@ -18,7 +18,7 @@
       <!-- 团队信息 -->
       <div class="section-title">
         团队信息
-        <button v-if="isCaptain" class="inline-edit-button cyber-button primary" @click="showEditTeamModal"
+        <button v-if="isCaptain  && isUserInTeam" class="inline-edit-button cyber-button primary" @click="showEditTeamModal"
           data-text="修改团队信息">
           <span class="glow"></span>
           <span class="content">
@@ -44,7 +44,7 @@
       <!-- 学生成员 -->
       <div class="section-title">
         学生成员
-        <button v-if="isCaptain" class="inline-edit-button cyber-button primary" @click="showEditStudentsModal"
+        <button v-if="isCaptain  && isUserInTeam" class="inline-edit-button cyber-button primary" @click="showEditStudentsModal"
           data-text="编辑学生成员">
           <span class="glow"></span>
           <span class="content">
@@ -128,7 +128,7 @@
       <!-- 教师成员 -->
       <div class="section-title">
         教师成员
-        <button v-if="isCaptain" class="inline-edit-button cyber-button primary" @click="showEditTeachersModal"
+        <button v-if="isCaptain && isUserInTeam" class="inline-edit-button cyber-button primary" @click="showEditTeachersModal"
           data-text="编辑教师成员">
           <span class="glow"></span>
           <span class="content">
@@ -174,7 +174,7 @@
       </div>
 
       <div class="team-action-buttons-container">
-        <div v-if="isCaptain" class="team-action-buttons">
+        <div v-if="isCaptain && isUserInTeam" class="team-action-buttons">
           <button class="cyber-button danger" @click="disbandTeam" data-text="解散团队">
             <span class="glow"></span>
             <span class="content">
@@ -183,7 +183,7 @@
           </button>
         </div>
 
-        <div class="team-action-buttons">
+        <div v-if="isUserInTeam" class="team-action-buttons">
           <button class="cyber-button warning" @click="leaveTeam" data-text="退出团队">
             <span class="glow"></span>
             <span class="content">
@@ -805,6 +805,21 @@ const sendInvite = async (student) => {
     }
   }
 }
+
+// 计算属性，判断用户是否在团队中
+const isUserInTeam = computed(() => {
+  const userStr = localStorage.getItem('user')
+  if (!userStr) return false
+  try {
+    const user = JSON.parse(userStr)
+    const studentInTeam = teamData.value.students.some(s => s.sn === user.sn)
+    const teacherInTeam = teamData.value.teachers.some(t => t.sn === user.sn)
+    return studentInTeam || teacherInTeam
+  } catch (e) {
+    console.error('解析 localStorage 中的 user 失败:', e)
+    return false
+  }
+})
 
 onMounted(() => {
   fetchTeamDetail()

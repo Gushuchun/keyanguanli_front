@@ -13,6 +13,15 @@
         </span>
       </button>
     </div>
+     <div class="search-bar">
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="debouncedSearch"
+          placeholder="搜索比赛名称"
+          class="search-input"
+        />
+      </div>
     <div class="dynamic-divider">
       <div class="energy-wave"></div>
       <div class="glow-line"></div>
@@ -34,6 +43,9 @@
               <div class="team-info">日期: {{ team.date }}</div>
               <div v-if="team.status === 'pending'" class="status-badge warning">
                 <span @click.stop="handlePendingStatusClick(team)">待确认-右键确认</span>
+              </div>
+              <div v-if="team.status === 'expired'" class="status-badge expired">
+                已过期-右键查看
               </div>
             </div>
           </router-link>
@@ -62,7 +74,7 @@
                 <div v-for="student in statusData.students" :key="student.sn" class="member-item">
                   <img :src="getAvatarUrl(student.avatar)" alt="头像" class="member-avatar" />
                   <span class="member-name">{{ student.username }}</span>
-                  <span v-if="!isCurrentUser(student) || ['confirmed', 'rejected'].includes(student.status)"
+                  <span v-if="!isCurrentUser(student) || ['confirmed', 'rejected', 'expired'].includes(student.status)"
                     :class="['status-tag', student.status]">
                     {{ getStatusText(student.status) }}
                   </span>
@@ -207,9 +219,6 @@
                 </div>
               </div>
             </div>
-            <div class="selector-actions">
-              <button class="cyber-button success" @click="closeTeamSelector">确定</button>
-            </div>
           </div>
         </div>
       </div>
@@ -235,9 +244,6 @@
                 </div>
               </div>
             </div>
-            <div class="selector-actions">
-              <button class="cyber-button success" @click="closeTeacherSelector">确定</button>
-            </div>
           </div>
         </div>
       </div>
@@ -247,6 +253,16 @@
       <div class="cyber-circle"></div>
       <div class="hexagon-pattern"></div>
     </div>
+
+  <div class="pagination">
+    <el-pagination
+      v-model:current-page="currentPage"
+      :page-size="pageSize"
+      :total="total"
+      layout="prev, pager, next"
+      @current-change="handlePageChange"
+    />
+  </div>
   </div>
 </template>
 
@@ -375,6 +391,8 @@ const getStatusText = (status) => {
       return '已拒绝'
     case 'pending':
       return '待确认'
+    case 'expired':
+      return '已过期'
     default:
       return '未知状态'
   }
@@ -413,7 +431,7 @@ const closeTeamSelector = () => {
 const fetchMyTeams = async () => {
   try {
     const response = await infoAPI.getmyTeam()
-    myTeams.value = response.data.results || []
+    myTeams.value = response.data.data || []
     console.log('团队列表:', myTeams.value)
   } catch (error) {
     console.error('获取团队列表失败:', error)
@@ -455,26 +473,35 @@ const getAvatarUrl = (avatarPath) => {
 }
 
 // 获取团队信息
-const fetchcompetitionData = async () => {
+const fetchcompetitionData =  async (page = 1, search = '') => {
   try {
-    const response = await infoAPI.fetchcompetitionData()
+    const response = search ? 
+      await infoAPI.searchCompetition(searchQuery.value , page) :
+      await infoAPI.fetchcompetitionData(page)
     // 检查 response.data.results 是否为数组
     if (Array.isArray(response.data.results)) {
-      // 给每个待确认的团队添加 showConfirm 属性
+      // 给每个待确认的比赛添加 showConfirm 属性
       response.data.results.forEach(team => {
         if (team.status === 'pending') {
           team.showConfirm = false
         }
       })
       teams.value = response.data.results
+      // 更新总数量
+      total.value = response.data.count
     } else {
       console.error('服务器返回的 results 不是数组:', response.data)
-      ElMessage.error('获取团队信息失败，服务器返回数据格式错误')
+      ElMessage.error('获取比赛信息失败，服务器返回数据格式错误')
     }
   } catch (error) {
-    console.error('获取团队信息失败:', error)
-    ElMessage.error('获取团队信息失败')
+    console.error('获取比赛信息失败:', error)
+    ElMessage.error('获取比赛信息失败')
   }
+}
+
+const handlePageChange = (page) => {
+  currentPage.value = page
+  fetchcompetitionData(page, searchQuery.value)
 }
 
 // 时间格式化函数
@@ -735,9 +762,25 @@ const removeTeacher = (teacher) => {
 
 
 const handleRightClick = async (team) => {
-  if (team.status === 'pending') {
+if (['pending', 'expired'].includes(team.status)) {
     await handlePendingStatusClick(team);
   }
+}
+const currentPage = ref(1)
+const pageSize = ref(5)
+const total = ref(0)
+
+const searchQuery = ref('')
+const isSearching = ref(false)
+let searchTimeout = null
+
+const debouncedSearch = () => {
+  clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    isSearching.value = true
+    currentPage.value = 1
+    fetchcompetitionData(1, searchQuery.value)
+  }, 300)
 }
 
 onMounted(() => {
@@ -747,6 +790,64 @@ onMounted(() => {
 </script>
 
 <style scoped>
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.modal-content .form-group input,
+/* .modal-content .form-group textarea, */
+.modal-content .form-group select {
+  background-color: #fff;
+  color: #333;
+}
+
+.modal-content-dark .form-group input,
+/* .modal-content-dark .form-group textarea, */
+.modal-content-dark .form-group select {
+  background-color: #333;
+  color: #fff;
+  border-color: #555;
+}
+
+.add-member-btn {
+  margin-top: 0.5rem;
+}
+
+.member-tag {
+  display: inline-block;
+  background-color: #f0f0f0;
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.modal-content-dark .member-tag {
+  background-color: #444;
+}
+
+.remove-btn {
+  margin-left: 0.5rem;
+  cursor: pointer;
+  color: #ff0000;
+}
+
 /* 添加空状态样式 */
 .empty-state {
   text-align: center;
@@ -1193,7 +1294,7 @@ onMounted(() => {
   top: 0;
   left: 0;
   width: 100%;
-  width: 100%;
+  height: 100%; 
   background-color: rgba(0, 0, 0, 0.5);
   display: flex;
   justify-content: center;
@@ -1211,6 +1312,7 @@ onMounted(() => {
   box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
   animation: fadeInUp 0.3s ease-in-out;
   position: relative;
+  /* margin-top: 3rem; */
 }
 
 .team-status-modal .modal-content-dark {
@@ -1285,6 +1387,12 @@ onMounted(() => {
 }
 
 .status-tag.rejected {
+  background: rgba(255, 65, 50, 0.2);
+  border: 1px solid rgba(255, 65, 50, 0.5);
+  color: #ff4132;
+}
+
+.status-tag.expired {
   background: rgba(255, 65, 50, 0.2);
   border: 1px solid rgba(255, 65, 50, 0.5);
   color: #ff4132;
@@ -1815,22 +1923,64 @@ onMounted(() => {
 }
 
 /* 美化团队名称输入框 */
-.form-group input[type="text"] {
+/* 美化输入框，包含比赛描述 */
+.form-group input[type="text"],
+.form-group input[type="date"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group input[type="file"] {
   width: 100%;
   padding: 0.8rem 1rem;
   border-radius: 12px;
   border: 1px solid rgba(0, 242, 254, 0.5);
-  background: rgba(0, 242, 254, 0.1);
+  background: rgba(0, 242, 254, 0.1); /* 统一背景颜色 */
   color: #fff;
   font-size: 1rem;
   transition: all 0.3s ease;
+  resize: vertical; /* 限制只能垂直拉伸 */
 }
 
-.form-group input[type="text"]:focus {
-  outline: none;
-  border-color: #00f2fe;
+.form-group textarea {
+  background: rgba(0, 242, 254, 0.1);
+}
+
+/* 为文件输入框的按钮添加样式 */
+.form-group input[type="file"]::file-selector-button {
+  padding: 0.4rem 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 242, 254, 0.5);
   background: rgba(0, 242, 254, 0.2);
-  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+  color: #fff;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.form-group input[type="file"]::file-selector-button:hover {
+  background: rgba(0, 242, 254, 0.3);
+}
+
+
+/* 深色主题下的输入框样式 */
+.modal-content-dark .form-group input[type="text"],
+.modal-content-dark .form-group input[type="date"],
+.modal-content-dark .form-group input[type="number"],
+.modal-content-dark .form-group textarea,
+.modal-content-dark .form-group input[type="file"] {
+  border-color: rgba(0, 242, 254, 0.5);
+  background: rgba(0, 242, 254, 0.1);
+  color: #fff;
+}
+
+/* 深色主题下文件输入框按钮样式 */
+.modal-content-dark .form-group input[type="file"]::file-selector-button {
+  border-color: rgba(0, 242, 254, 0.5);
+  background: rgba(0, 242, 254, 0.2);
+  color: #fff;
+}
+
+.modal-content-dark .form-group input[type="file"]::file-selector-button:hover {
+  background: rgba(0, 242, 254, 0.3);
 }
 
 .selector-actions {
@@ -1895,5 +2045,121 @@ onMounted(() => {
 .confirm-btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 5px 15px rgba(0, 242, 254, 0.4);
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+/* 翻页器整体样式 */
+.el-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+/* 上一页和下一页按钮样式 */
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  background: linear-gradient(145deg, rgba(0, 15, 26, 0.8), rgba(0, 32, 53, 0.6));
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  transition: all 0.3s ease;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-pagination .btn-prev:hover,
+.el-pagination .btn-next:hover {
+  color: #00f2fe;
+  border-color: #00f2fe;
+  transform: translateY(-2px);
+}
+
+.el-pagination .btn-prev.is-disabled,
+.el-pagination .btn-next.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.el-pagination .btn-prev.is-disabled:hover,
+.el-pagination .btn-next.is-disabled:hover {
+  transform: translateY(0);
+}
+
+/* 页码列表样式 */
+.el-pagination .el-pager {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+/* 页码按钮样式 */
+.el-pagination .el-pager li.number {
+  background: linear-gradient(145deg, rgba(0, 15, 26, 0.8), rgba(0, 32, 53, 0.6));
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  transition: all 0.3s ease;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.el-pagination .el-pager li.number:hover {
+  color: #00f2fe;
+  border-color: #00f2fe;
+  transform: translateY(-2px);
+}
+
+.el-pagination .el-pager li.number.is-active {
+  background: #00f2fe;
+  border-color: #00f2fe;
+  color: #000;
+  font-weight: bold;
+}
+
+.status-badge.expired {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  padding: 4px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  background: rgba(255, 65, 50, 0.6);
+  color: #fff;
+  border: 1px solid rgba(255, 65, 50, 0.8);
+  box-shadow: 0 0 8px rgba(255, 65, 50, 0.5);
+}
+
+.search-bar {
+  margin-left: 37.5rem;
+  position: relative;
+}
+
+.search-input {
+  padding: 12px 16px;
+  border: 2px solid rgba(0, 242, 254, 0.6);
+  border-radius: 8px;
+  font-size: 16px; /* Larger font size */
+  width: 250px; /* Wider search box */
+  transition: border-color 0.2s ease-in-out;
+  background: transparent;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #00f2fe;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
 }
 </style>

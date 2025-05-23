@@ -110,7 +110,15 @@
             @click.stop
           >
             <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>指导教师管理</h2>
+              <div class="modal-header">
+                <h2>指导教师管理</h2>
+                <button 
+                  class="close-modal-btn" 
+                  @click="hideEditTeachersModal"
+                >
+                  &times;
+                </button>
+              </div>
 
               <!-- 教师列表 -->
               <div class="members-list">
@@ -387,16 +395,17 @@ const updateCompetitionInfo = async () => {
 }
 
 const hideEditTeachersModal = () => {
-  console.log('hideEditTeachersModal');
+  console.log('尝试关闭编辑教师模态框');
   isEditTeachersModalVisible.value = false;
 };
 
 // 选择教师
 const selectTeacher = async (teacher) => {
+  console.log('选择教师:', teacher)
   try {
     // 弹出确认弹窗
     await ElMessageBox.confirm(
-      `确定要邀请 ${teacher.name} 作为指导老师吗？`,
+      `确定要邀请 ${teacher.username} 作为指导老师吗？`,
       '确认邀请',
       {
         confirmButtonText: '确定',
@@ -955,6 +964,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 600;
 }
 
 .modal-content {
@@ -1497,5 +1507,33 @@ onMounted(() => {
   font-size: 0.9rem;
   font-weight: bold;
   z-index: 1;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  text-align: center; 
+  position: relative;
+}
+
+.modal-header h2 {
+  flex-grow: 1; /* 让标题占据剩余空间 */
+  margin: 0; /* 移除默认外边距 */
+}
+
+.close-modal-btn {
+  background: transparent;
+  border: none;
+  font-size: 2.5rem;
+  color: #00f2fe;
+  cursor: pointer;
+  transition: color 0.3s ease;
+  margin-left: -3rem;
+}
+
+.close-modal-btn:hover {
+  color: #66f9ff;
 }
 </style>
