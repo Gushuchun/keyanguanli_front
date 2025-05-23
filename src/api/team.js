@@ -21,8 +21,10 @@ export const infoAPI = {
 
     TeamConfirmStatus: (team_sn) => api.get(`/team/team-confirm-status/?team_sn=${team_sn}`),
 
-    fetchTeamData:() => api.get(`/team/my/`),
+    fetchTeamData: (page) => api.get('/team/my/', { params: { page } }),
 
     quitTeam: (id) => api.post(`/team/${id}/quit/`),
+
+    searchTeam: (keyword, page) => api.get(`/team/search/?key=${keyword}`, { params: { page } }),
   };
 

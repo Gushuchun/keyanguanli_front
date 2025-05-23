@@ -1,29 +1,62 @@
-# vue3_front_proj
+# 比赛管理前端项目说明
 
-This template should help get you started developing with Vue 3 in Vite.
+## 一、项目概述
+本项目是一个基于Vue 3的前端应用，主要用于学生和教师进行比赛管理，包括比赛创建、团队选择、比赛确认等功能。界面采用现代化设计，支持暗黑模式切换。
 
-## Recommended IDE Setup
+## 二、技术栈
+1. **前端框架**：Vue 3
+2. **状态管理**：Pinia（从 `@/stores/theme` 推测使用状态管理）
+3. **UI组件库**：Element Plus（代码中使用了 `ElMessageBox` 和 `ElMessage`）
+4. **HTTP请求**：Axios
+5. **路由管理**：Vue Router
+6. **构建工具**：Vite（推测，常见Vue 3项目构建工具）
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur).
+## 三、核心功能模块
+### 1. 比赛列表展示
+- 学生和教师可查看自己参与的比赛列表。
+- 比赛状态分为待确认、已确认等，不同状态有不同的显示样式。
+- 点击比赛卡片可进入比赛详情页，右键点击待确认比赛可进行确认操作。
 
-## Customize configuration
+### 2. 比赛创建
+- 仅学生角色可创建新比赛。
+- 创建比赛时需填写比赛名称、日期、描述、分数等信息。
+- 可选择已有的团队和带队教师。
+- 支持上传比赛文件（证书等）。
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+### 3. 团队和教师选择
+- 提供团队搜索功能，可按团队名称搜索。
+- 提供教师搜索功能，可按姓名或工号搜索。
+- 支持多选教师作为带队老师。
 
-## Project Setup
+### 4. 比赛确认
+- 学生和教师可对参与的比赛进行确认或拒绝操作。
+- 操作前会弹出确认对话框，确保用户意图。
+- 操作结果实时更新，刷新页面显示最新状态。
 
-```sh
+## 四、使用方法
+### 1. 环境准备
+确保已安装Node.js和npm。
+
+### 2. 安装依赖
+```bash
 npm install
 ```
 
-### Compile and Hot-Reload for Development
-
-```sh
+### 3. 启动开发服务器
+```bash
 npm run dev
 ```
 
-### Compile and Minify for Production
-
-```sh
+### 4. 构建项目
+```bash
 npm run build
 ```
+
+### 5. 项目配置
+- 在 `src/api/competition.js` 中配置API接口地址。
+- 在 `src/stores/theme.js` 中管理主题状态。
+
+## 五、注意事项
+1. 部分API请求需要携带JWT Token，确保 `localStorage` 中有有效的 `token`。
+2. 图片资源路径在 `src/assets/image` 目录下，可根据需要替换默认头像等图片。
+3. 开发过程中建议使用ESLint进行代码规范检查。

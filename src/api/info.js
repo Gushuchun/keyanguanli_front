@@ -25,8 +25,16 @@ export const infoAPI = {
   // 更新学生信息
   updateStudentInfo: (id, data) => api.put(`/student/info/${id}/`, data),
 
+  updateTeacherInfo: (id, data) => api.put(`/teacher/info/${id}/`, data),
+
   getstudentavatar: () => api.get(`/student/info/get_avatar/`),
 
   getteacheravatar: () => api.get(`/teacher/info/get_avatar/`),
+
+  resetpassword: (data) => api.post(`/user/reset-password/`, data),
+
+  getstudentinfo: (data) => api.post(`/student/info/get-student-info/`, data),
+
+  getteachertinfo: (data) => api.post(`/teacher/info/get-teacher-info/`, data),
 
 };
