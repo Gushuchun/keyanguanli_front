@@ -6,10 +6,17 @@ import myteam from '@/views/team/myteam.vue'
 import mycompetition from '@/views/competition/mycompetition.vue'
 import competitiondetail from '@/views/competition/competitiondetail.vue'
 import allteamcompetition from '@/views/team/allteamcompetition.vue'
+import settings from '@/views/info/settings.vue'
+import studentinfo from '@/views/info/studentinfo.vue'
+import teacherinfo from '@/views/info/teacherinfo.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/',
+      redirect: '/login'
+    },
     {
       path: '/login',
       name: 'login',
@@ -49,8 +56,35 @@ const router = createRouter({
       path: '/team/allteamcompetition',
       name: 'allteamcompetition',
       component: allteamcompetition
+    },
+    {
+      path: '/settings',
+      name: 'settings',
+      component: settings
+    },
+    {
+      path: '/student-info/:sn',
+      name: 'student-info',
+      component: studentinfo
+    },
+    {
+      path: '/teacher-info/:sn',
+      name: 'teacher-info',
+      component: teacherinfo
     }
   ]
 })
+
+// 全局前置守卫
+router.beforeEach((to, from, next) => {
+  const token = localStorage.getItem('token');
+  if (to.name !== 'login' && !token) {
+    // 如果不是登录页面且没有 token，跳转到登录页面
+    next({ name: 'login' });
+  } else {
+    // 其他情况正常跳转
+    next();
+  }
+});
 
 export default router

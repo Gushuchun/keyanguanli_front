@@ -162,7 +162,7 @@ onUnmounted(() => {
 
 /* 显示隐藏原生光标的样式 */
 body.cursor-effect-active *{
-  cursor: none !important;
+  cursor: none;
 }
 
 /* 增强点击动画 */

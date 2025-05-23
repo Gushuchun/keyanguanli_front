@@ -15,7 +15,38 @@ export const useAuthStore = defineStore('auth', {
         // authAPI.login 调用将返回完整的 Axios 响应对象，
         // res.data 将包含后端载荷。
         
-        if (res.data.code!=200) { // 检查响应数据中是否存在 token
+        if (res.data.code===200) { // 检查响应数据中是否存在 token
+          this.user = res.data; // 如果需要，存储整个用户对象
+          this.token = res.data.token;
+          localStorage.setItem('token', res.data.token);
+          localStorage.setItem('user', JSON.stringify({
+            user_id: res.data.user_id,
+            username: res.data.username,
+            role: res.data.role,
+            id: res.data.id,
+            sn: res.data.sn
+          }));
+          return res.data; // 成功登录
+        } else {
+          if (res.data && res.data.message) {
+            throw new Error(res.data.message);
+          }
+          throw new Error('登录失败：未预期的响应结构。');
+        }
+      } catch (error) {
+        console.error('登录 action 失败:', error);
+        throw error;
+      }
+    },
+
+    async login_code(credentials) {
+      try {
+        const res = await authAPI.login_code(credentials); // 这是 Axios 调用
+
+        // authAPI.login 调用将返回完整的 Axios 响应对象，
+        // res.data 将包含后端载荷。
+        
+        if (res.data.code===200) { // 检查响应数据中是否存在 token
           this.user = res.data; // 如果需要，存储整个用户对象
           this.token = res.data.token;
           localStorage.setItem('token', res.data.token);

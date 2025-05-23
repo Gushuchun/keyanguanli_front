@@ -17,7 +17,16 @@
             <img :src="newteamIconSrc" alt="创建新团队" class="action-icon tiny" />
             </span>
         </button>
-    </div>
+      </div>
+      <div class="search-bar">
+        <input
+          type="text"
+          v-model="searchQuery"
+          @input="debouncedSearch"
+          placeholder="搜索团队名称"
+          class="search-input"
+        />
+      </div>
       <div class="dynamic-divider">
         <div class="energy-wave"></div>
         <div class="glow-line"></div>
@@ -27,28 +36,27 @@
       <div class="info-panel">
         <div class="team-list">
             <template v-if="teams.length > 0">
-                <router-link
-                    v-for="(team, index) in teams"
-                    :key="team.id"
-                    :to="team.status !== 'pending' ? `/team/detail/${team.id}` : ''"
-                    class="team-card"
-                
-                    @click.native="handleTeamClick(team)"
-                    >
-                    <div class="border-effect"></div>
-                    <div class="team-content">
-                        <h3 class="team-name">{{ team.name }}</h3>
-                        <div class="team-info">队长: {{ team.cap_name }}</div>
-                        <div class="team-info">成员数: {{ team.people_num }}</div>
-                        <div class="team-info">教师数: {{ team.teacher_num }}</div>
-                        <div class="team-info">竞赛参与数: {{ team.race_num }}</div>
-                        <div class="team-info">获奖数量: {{ team.prize_num }}</div>
-                        <div class="team-info">创建时间: {{ formatDate(team.create_time) }}</div>
-                        
-                        <div v-if="team.status === 'pending'" class="status-badge warning">待确认</div>
-                    </div>
-                    <!-- <div class="status-badge warning">未成立</div> -->
-                </router-link>
+ <router-link
+    v-for="(team, index) in teams"
+    :key="team.id"
+    :to="['pending', 'expired'].includes(team.status) ? '' : `/team/detail/${team.id}`"
+    class="team-card"
+    @click.native="handleTeamClick(team)"
+  >
+    <div class="border-effect"></div>
+    <div class="team-content">
+      <h3 class="team-name">{{ team.name }}</h3>
+      <div class="team-info">队长: {{ team.cap_name }}</div>
+      <div class="team-info">成员数: {{ team.people_num }}</div>
+      <div class="team-info">教师数: {{ team.teacher_num }}</div>
+      <div class="team-info">竞赛参与数: {{ team.race_num }}</div>
+      <div class="team-info">获奖数量: {{ team.prize_num }}</div>
+      <div class="team-info">创建时间: {{ formatDate(team.create_time) }}</div>
+      
+      <div v-if="team.status === 'pending'" class="status-badge warning">待确认</div>
+      <div v-if="team.status === 'expired'" class="status-badge expired">已过期</div>
+    </div>
+  </router-link>
             </template>
              <!-- 空状态提示 -->
             <div v-else class="empty-state">
@@ -75,7 +83,7 @@
                         <img :src="getAvatarUrl(student.avatar)" alt="头像" class="member-avatar" />
                         <span class="member-name">{{ student.username }}</span>
                         <span 
-                            v-if="!isCurrentUser(student) || ['confirmed', 'rejected'].includes(student.status)"
+                            v-if="!isCurrentUser(student) || ['confirmed', 'rejected', 'expired'].includes(student.status)"
                             :class="['status-tag', student.status]"
                             >
                             {{ getStatusText(student.status) }}
@@ -111,7 +119,7 @@
                         
                         <!-- 状态标签仅对非当前用户显示 -->
                         <span 
-                            v-if="!isCurrentUser(teacher) || ['confirmed', 'rejected'].includes(teacher.status)"
+                            v-if="!isCurrentUser(teacher) || ['confirmed', 'rejected', 'expired'].includes(teacher.status)"
                             :class="['status-tag', teacher.status]"
                         >
                             {{ getStatusText(teacher.status) }}
@@ -279,10 +287,20 @@
         <div class="cyber-circle"></div>
         <div class="hexagon-pattern"></div>
       </div>
+
+        <div class="pagination">
+    <el-pagination
+      v-model:current-page="currentPage"
+      :page-size="pageSize"
+      :total="total"
+      layout="prev, pager, next"
+      @current-change="handlePageChange"
+    />
+  </div>
     </div>
-  </template>
-  
-  <script setup>
+</template>
+
+<script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useThemeStore } from '@/stores/theme'
 import axios from 'axios'
@@ -299,13 +317,24 @@ const statusData = ref({
 const selectedTeam = ref(null)
 let role = null
 
+// 翻页
+const currentPage = ref(1)
+const pageSize = ref(5)
+const total = ref(0)
+const handlePageChange = (page) => {
+  currentPage.value = page
+  fetchTeamData(page, searchQuery.value)
+}
 
 // 处理团队点击事件
 const handleTeamClick = async (team) => {
-  if (team.status === 'pending') {
+  if (['pending', 'expired'].includes(team.status)) {
     await fetchTeamConfirmStatus(team.sn)
     selectedTeam.value = team
     isStatusModalVisible.value = true
+  } else {
+    // 非 pending 和 expired 状态正常跳转
+    router.push(`/team/detail/${team.id}`)
   }
 }
 
@@ -324,6 +353,8 @@ const getStatusText = (status) => {
       return '已拒绝'
     case 'pending':
       return '待确认'
+    case 'expired':
+      return '已过期'
     default:
       return '未知状态'
   }
@@ -364,10 +395,14 @@ const getAvatarUrl = (avatarPath) => {
 }
 
 // 获取团队信息
-const fetchTeamData = async () => {
+const fetchTeamData = async (page = 1, search = '') => {
   try {
-    const response = await infoAPI.fetchTeamData()
+    const response = search ? 
+      await infoAPI.searchTeam(searchQuery.value, page) :
+      await infoAPI.fetchTeamData(page)
+      
     teams.value = response.data.results || []
+    total.value = response.data.count
   } catch (error) {
     console.error('获取团队信息失败:', error)
   }
@@ -677,6 +712,19 @@ const createTeam = async () => {
       ElMessage.error('创建团队失败，请稍后再试。')
     }
   }
+}
+
+const searchQuery = ref('')
+const isSearching = ref(false)
+let searchTimeout = null
+
+const debouncedSearch = () => {
+  clearTimeout(searchTimeout)
+  searchTimeout = setTimeout(() => {
+    isSearching.value = true
+    currentPage.value = 1
+    fetchTeamData(1, searchQuery.value)
+  }, 300)
 }
 
 onMounted(() => {
@@ -1719,5 +1767,114 @@ onMounted(() => {
     linear-gradient(#fff, #fff);
   mask-composite: exclude;
   -webkit-mask-composite: xor;
+}
+
+.status-badge.expired {
+  background: rgba(255, 65, 50, 0.6);
+  border-color: rgba(255, 65, 50, 0.8);
+}
+
+.status-tag.expired {
+  background: rgba(255, 65, 50, 0.2);
+  border: 1px solid rgba(255, 65, 50, 0.5);
+  color: #ff4132;
+}
+
+.pagination {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+  margin-bottom: 40px;
+}
+
+.el-pagination {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: #fff;
+  font-family: 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.el-pagination .btn-prev,
+.el-pagination .btn-next {
+  background: linear-gradient(145deg, rgba(0, 15, 26, 0.8), rgba(0, 32, 53, 0.6));
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  transition: all 0.3s ease;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.el-pagination .btn-prev:hover,
+.el-pagination .btn-next:hover {
+  color: #00f2fe;
+  border-color: #00f2fe;
+  transform: translateY(-2px);
+}
+
+.el-pagination .btn-prev.is-disabled,
+.el-pagination .btn-next.is-disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.el-pagination .btn-prev.is-disabled:hover,
+.el-pagination .btn-next.is-disabled:hover {
+  transform: translateY(0);
+}
+
+.el-pagination .el-pager {
+  display: flex;
+  gap: 8px;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.el-pagination .el-pager li.number {
+  background: linear-gradient(145deg, rgba(0, 15, 26, 0.8), rgba(0, 32, 53, 0.6));
+  border: 1px solid rgba(0, 242, 254, 0.2);
+  border-radius: 6px;
+  color: #fff;
+  transition: all 0.3s ease;
+  padding: 6px 12px;
+  cursor: pointer;
+}
+
+.el-pagination .el-pager li.number:hover {
+  color: #00f2fe;
+  border-color: #00f2fe;
+  transform: translateY(-2px);
+}
+
+.el-pagination .el-pager li.number.is-active {
+  background: #00f2fe;
+  border-color: #00f2fe;
+  color: #000;
+  font-weight: bold;
+}
+
+.search-bar {
+  margin-left: 37.5rem;
+  position: relative;
+}
+
+.search-input {
+  padding: 12px 16px;
+  border: 2px solid rgba(0, 242, 254, 0.6);
+  border-radius: 8px;
+  font-size: 16px; /* Larger font size */
+  width: 250px; /* Wider search box */
+  transition: border-color 0.2s ease-in-out;
+  background: transparent;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #00f2fe;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
 }
 </style>
