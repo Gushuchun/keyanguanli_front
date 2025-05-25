@@ -78,7 +78,7 @@
                 <!-- 学生列表 -->
                 <div class="members-section">
                 <h3>学生成员</h3>
-                <div class="member-list">
+                <div class="member-list scrollable">
                     <div v-for="student in statusData.students" :key="student.sn" class="member-item">
                         <img :src="getAvatarUrl(student.avatar)" alt="头像" class="member-avatar" />
                         <span class="member-name">{{ student.username }}</span>
@@ -112,7 +112,7 @@
                 <!-- 教师列表 -->
                 <div class="members-section">
                 <h3>教师成员</h3>
-                <div class="member-list">
+                <div class="member-list scrollable">
                     <div v-for="teacher in statusData.teachers" :key="teacher.sn" class="member-item">
                         <img :src="getAvatarUrl(teacher.avatar)" alt="头像" class="member-avatar" />
                         <span class="member-name">{{ teacher.username }}</span>
@@ -1149,7 +1149,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 10;
+  z-index: 300;
 }
 
 .team-status-modal .modal-content,
@@ -1876,5 +1876,30 @@ onMounted(() => {
   outline: none;
   border-color: #00f2fe;
   box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
+}
+
+.member-list.scrollable {
+  max-height: 200px; /* 设置最大高度 */
+  overflow-y: auto; /* 添加垂直滚动条 */
+  padding-right: 8px; /* 为滚动条留出空间 */
+}
+
+/* 自定义滚动条样式 */
+.member-list.scrollable::-webkit-scrollbar {
+  width: 6px;
+}
+
+.member-list.scrollable::-webkit-scrollbar-track {
+  background: rgba(0, 242, 254, 0.1);
+  border-radius: 3px;
+}
+
+.member-list.scrollable::-webkit-scrollbar-thumb {
+  background: rgba(0, 242, 254, 0.4);
+  border-radius: 3px;
+}
+
+.member-list.scrollable::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 242, 254, 0.6);
 }
 </style>

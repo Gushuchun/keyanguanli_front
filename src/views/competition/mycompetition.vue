@@ -154,7 +154,7 @@
             <!-- 输入比赛分数 -->
             <div class="form-group">
               <label for="newCompetitionScore">比赛分数:</label>
-              <input type="number" id="newCompetitionScore" v-model="newCompetition.score" required />
+              <input type="text" id="newCompetitionScore" v-model="newCompetition.score" required  placeholder="如果没有得奖，请填无"/>
             </div>
 
             <!-- 选择比赛文件 -->

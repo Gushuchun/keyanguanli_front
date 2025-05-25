@@ -12,5 +12,7 @@ export const authAPI = {
   login_code: (data) => api.post('/user/code_login/', data),
 
   forgot_password: (data) => api.post('/user/forgot-password/', data),
+
+  get_public_key: () => api.get('/user/get-public-key/'),
 }
 

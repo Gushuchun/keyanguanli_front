@@ -190,6 +190,7 @@ import { ElMessage } from 'element-plus';
 import { infoAPI } from '@/api/index';
 import { useThemeStore } from '@/stores/theme';
 import { authAPI } from "@/api/auth";
+import { RSAEncrypt } from '@/utils/rsa'; // 引入 RSA 加密工具
 
 const themeStore = useThemeStore();
 const form = ref({
@@ -230,6 +231,7 @@ const loginSubViewKey = computed(() => {
   return 'standard-login-view';
 });
 
+const publicKey = ref(null); 
 const sendVerificationCode = async () => {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(emailLoginForm.value.email)) {
@@ -422,6 +424,10 @@ onMounted(async () => {
     if (collegeRes.data.code === 200) {
       colleges.value = collegeRes.data.data;
     }
+    const response = await authAPI.get_public_key();
+    if (response.data) {
+      publicKey.value = response.data.public_key;
+    }
   } catch (error) {
     console.error('获取学院列表失败:', error);
     ElMessage.error('学院信息加载失败');
@@ -510,7 +516,12 @@ const onSubmit = async () => {
 
   try {
     loading.value = true;
-    const response = await authStore.login(form.value);
+    const encryptedPassword = RSAEncrypt(form.value.password, publicKey.value); // 使用 RSA 加密密码
+    console.log(encryptedPassword.length)
+    const response = await authStore.login({
+      username: form.value.username,
+      password: encryptedPassword, // 发送加密后的密码
+    });
 
     if (response.code === 200) {
       ElMessage.success({
