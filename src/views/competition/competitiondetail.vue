@@ -519,8 +519,7 @@ onMounted(() => {
 <style scoped>
 .user-info-container {
   min-height: 100vh;
-  background: radial-gradient(ellipse at bottom, #eaeaee 0%,),
-  url('@/assets/images/cyber-bg.jpg') center/cover;
+  background: radial-gradient(ellipse at bottom, #eaeaee 0%,);
   position: relative;
   overflow: hidden;
   padding: 0.8rem;

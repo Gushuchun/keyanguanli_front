@@ -517,9 +517,7 @@ onUnmounted(() => {
   min-height: 100vh;
   /* 保持全屏高度，但内部元素会上移 */
   background:
-    radial-gradient(ellipse at bottom, #eaeaee 0%, ),
-    /* 考虑将 'at bottom' 改为 'at center' 或移除，减少底部强调 */
-    url('@/assets/images/cyber-bg.jpg') center/cover;
+    radial-gradient(ellipse at bottom, #eaeaee 0%, );
   position: relative;
   overflow: hidden;
   /* 如果内容确实溢出，这将隐藏滚动条，但目标是让内容不溢出 */
