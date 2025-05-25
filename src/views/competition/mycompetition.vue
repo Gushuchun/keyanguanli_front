@@ -961,8 +961,7 @@ onMounted(() => {
 
 .dark .user-info-container {
   background:
-    radial-gradient(ellipse at bottom, #eaeaee 0%, ),
-    url('@/assets/images/cyber-bg-dark.jpg') center/cover;
+    radial-gradient(ellipse at bottom, #eaeaee 0%, );
 }
 
 .particles {
@@ -1177,7 +1176,6 @@ onMounted(() => {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/hex-pattern.svg');
   opacity: 0.05;
   pointer-events: none;
 }

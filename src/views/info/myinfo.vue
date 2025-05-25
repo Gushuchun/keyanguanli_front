@@ -527,8 +527,7 @@ onUnmounted(() => {
 
 .dark .user-info-container {
   background:
-    radial-gradient(ellipse at bottom, #eaeaee 0%, ),
-    url('@/assets/images/cyber-bg-dark.jpg') center/cover;
+    radial-gradient(ellipse at bottom, #eaeaee 0%, );
 }
 
 /* 粒子特效 - 不影响布局 */
@@ -827,7 +826,6 @@ onUnmounted(() => {
   position: absolute;
   width: 100%;
   height: 100%;
-  background-image: url('@/assets/images/hex-pattern.svg');
   opacity: 0.05;
   pointer-events: none;
 }
@@ -1417,7 +1415,6 @@ onUnmounted(() => {
 /* 添加图标字体 */
 @font-face {
   font-family: 'iconfont';
-  src: url('@/assets/fonts/iconfont.woff2') format('woff2');
 }
 
 .icon-edit::before {
