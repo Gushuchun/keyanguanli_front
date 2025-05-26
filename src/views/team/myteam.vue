@@ -1684,7 +1684,7 @@ onMounted(() => {
 
 /* 美化团队名称输入框 */
 .form-group input[type="text"] {
-  width: 100%;
+  width: 90%;
   padding: 0.8rem 1rem;
   border-radius: 12px;
   border: 1px solid rgba(0, 242, 254, 0.5);

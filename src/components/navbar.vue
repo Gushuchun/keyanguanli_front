@@ -480,11 +480,13 @@ const themeButtonTitle = computed(() => {
   font-size: 20px;
   font-weight: 600;
   gap: 10px; 
+  margin-left: -10px;
 }
 
 .brand-logo {
   height: 30px;
   width: auto;
+  margin-left: -10px;
 }
 
 .navbar-brand .brand-text {

@@ -62,7 +62,7 @@
       </Teleport>
 
       <Teleport to="body">
-        <div v-if="isContextMenuVisible" class="context-menu"
+        <div :class="themeStore.currentTheme === 'dark' ? 'context-menu-dark' : 'context-menu'" v-if="isContextMenuVisible"
           :style="{ top: contextMenuY + 'px', left: contextMenuX + 'px', zIndex: 10000 }">
           <ul>
             <li @click="updateAvatar">更新头像</li>
@@ -877,37 +877,57 @@ onUnmounted(() => {
   transform: translateX(5px);
 }
 
-/* 修改右键菜单样式 */
 .context-menu {
   background: rgba(255, 255, 255, 0.95);
-  /* 白天模式背景 */
   border: 1px solid rgba(0, 242, 255, 0.3);
-  /* 其他样式保持不变... */
 }
 
-/* 暗夜模式适配 */
-.dark .context-menu {
-  background: rgba(30, 30, 30, 0.98) !important;
-  /* 深色背景 */
-  border-color: rgba(0, 242, 255, 0.15) !important;
-  box-shadow: 0 2px 15px rgba(0, 242, 255, 0.1) !important;
-}
-
-.dark .context-menu li {
-  color: #e0e0e0 !important;
-  /* 浅灰色文字 */
-}
-
-.dark .context-menu li:hover {
-  background: rgba(0, 242, 255, 0.08) !important;
-  color: #00f2fe !important;
-  /* 荧光蓝文字 */
-}
-
-/* 添加过渡动画 */
 .context-menu {
   transition: all 0.3s ease;
 }
+
+
+.context-menu-dark {
+  position: absolute;
+  z-index: 30;
+  background: #313641 !important;
+  border: 1px solid rgba(0, 242, 255, 0.3);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 0 10px rgba(0, 242, 255, 0.2);
+  animation: menuFadeIn 0.2s ease-in-out;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+.context-menu-dark ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.context-menu-dark li {
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  color: #eaeaea;
+}
+
+.context-menu-dark li:hover {
+  background-color: rgba(0, 242, 255, 0.1);
+  transform: translateX(5px);
+}
+
+.context-menu-dark {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(0, 242, 255, 0.3);
+}
+
+.context-menu-dark {
+  transition: all 0.3s ease;
+}
+
 
 /* 头像预览 */
 .avatar-preview {
