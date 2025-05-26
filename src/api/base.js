@@ -8,8 +8,8 @@ const router = useRouter()
 // 创建基础axios实例
 const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
-    ? 'http://8.138.116.127:8105/api' 
-    : 'http://127.0.0.1:8105/api',
+    ? '/api' // 生产环境
+    : 'http://127.0.0.1:8105/api', // 本地环境
   timeout: 10000
 });
 
