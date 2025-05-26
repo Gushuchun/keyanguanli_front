@@ -234,7 +234,7 @@ const clearSearch = () => {
 // 获取天气数据
 const getWeather = async () => {
   try {
-    const response = await axios.get('http://gfeljm.tianqiapi.com/api1', {
+    const response = await axios.get('http://gfeljm.tianqiapi.com/api', {
       params: {
         appid: '23562228',
         appsecret: 'eFu7G5yq',
