@@ -10,7 +10,7 @@ const api = axios.create({
   baseURL: process.env.NODE_ENV === 'production' 
     ? '/api' // 生产环境
     : 'http://127.0.0.1:8105/api', // 本地环境
-  timeout: 10000
+  timeout: 20000
 });
 
 // 请求拦截器（添加JWT Token）
