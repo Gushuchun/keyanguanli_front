@@ -456,15 +456,7 @@ const updateStudentStatus = async (newStatus, student) => {
     )
 
     // 用户点击“确定”后才执行请求
-    const response = await axios.put(
-      `http://127.0.0.1:8105/api/team/confirm-student/${student.id}/`,
-      { status: newStatus },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    )
+    const response = await infoAPI.confirmstudent(student.id, { status: newStatus })
 
     if (response.data.code === 200) {
       ElMessage.success(newStatus === 'confirmed' ? '已确认加入团队' : '已拒绝加入团队')
@@ -501,15 +493,7 @@ const updateTeacherStatus = async (newStatus, teacher) => {
     )
 
     // 用户点击“确定”后才执行请求
-    const response = await axios.put(
-      `http://127.0.0.1:8105/api/team/confirm-teacher/${teacher.id}/`,
-      { status: newStatus },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    )
+    const response = await infoAPI.confirmteacher(teacher.id, { status: newStatus })
 
     if (response.data.code === 200) {
       ElMessage.success(newStatus === 'confirmed' ? '已确认加入团队' : '已拒绝加入团队')
@@ -683,19 +667,11 @@ const createTeam = async () => {
       }
     )
 
-    const response = await axios.post(
-      'http://127.0.0.1:8105/api/team/',
-      {
-        name: newTeam.value.name,
-        member_ids: selectedStudents.value.map(student => student.sn),
-        teacher_ids: selectedTeachers.value.map(teacher => teacher.sn)
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    )
+    const response = await infoAPI.createteam({
+      name: newTeam.value.name,
+      member_ids: selectedStudents.value.map(student => student.sn),
+      teacher_ids: selectedTeachers.value.map(teacher => teacher.sn)
+    })
 
     if (response.data.code === 200) {
       ElMessage.success('团队创建成功')

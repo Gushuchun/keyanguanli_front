@@ -26,5 +26,11 @@ export const infoAPI = {
     quitTeam: (id) => api.post(`/team/${id}/quit/`),
 
     searchTeam: (keyword, page) => api.get(`/team/search/?key=${keyword}`, { params: { page } }),
+
+    confirmstudent: (id, data) => api.put(`/team/confirm-student/${id}/`, data),
+
+    confirmteacher: (id, data) => api.put(`/team/confirm-teacher/${id}/`, data),
+
+    createteam: (data) => api.post(`/team/`, data),
   };
 

@@ -552,15 +552,7 @@ const updateStudentStatus = async (newStatus, student) => {
     )
 
     // 用户点击“确定”后才执行请求
-    const response = await axios.put(
-      `http://127.0.0.1:8105/api/competition/confirm-student/${student.id}/`,
-      { status: newStatus },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    )
+    const response = await infoAPI.CompetitionStudentConfirm(student.id, { status: newStatus })
 
     if (response.data.code === 200) {
       ElMessage.success(newStatus === 'confirmed' ? '已确认比赛' : '已拒绝加入团队')
@@ -597,15 +589,7 @@ const updateTeacherStatus = async (newStatus, teacher) => {
     )
 
     // 用户点击“确定”后才执行请求
-    const response = await axios.put(
-      `http://127.0.0.1:8105/api/competition/confirm-teacher/${teacher.id}/`,
-      { status: newStatus },
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`
-        }
-      }
-    )
+    const response = await infoAPI.CompetitionTeacherConfirm(teacher.id, {status: newStatus})
 
     if (response.data.code === 200) {
       ElMessage.success(newStatus === 'confirmed' ? '已确认该比赛' : '已拒绝加入团队')

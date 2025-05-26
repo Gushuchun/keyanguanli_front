@@ -21,9 +21,9 @@ export const infoAPI = {
 
     createCompetition: (data) => api.post(`/competition/`, data),
 
-    CompetitionStudentConfirm: (id, data) => api.post(`/competition/confirm-student/${id}`, data),
+    CompetitionStudentConfirm: (id, data) => api.put(`/competition/confirm-student/${id}/`, data),
 
-    CompetitionTeacherConfirm: (id, data) => api.post(`/competition/confirm-teacher/${id}`, data),
+    CompetitionTeacherConfirm: (id, data) => api.put(`/competition/confirm-teacher/${id}/`, data),
 
     searchCompetition: (keyword, page) => api.get(`/competition/search/?key=${keyword}`, { params: { page } }),
 

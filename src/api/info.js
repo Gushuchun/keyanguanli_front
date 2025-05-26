@@ -37,4 +37,7 @@ export const infoAPI = {
 
   getteachertinfo: (data) => api.post(`/teacher/info/get-teacher-info/`, data),
 
+  getstudentavatar: () => api.get(`/student/info/get_avatar/`),
+
+  getteacheravatar: () => api.get(`/teacher/info/get_avatar/`),
 };

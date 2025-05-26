@@ -305,27 +305,17 @@ const fetchUserAvatar = async () => {
     userAvatarUrl.value = '';
     return;
   }
-  let apiUrl = '';
-  if (userRole.value === 'student') {
-    apiUrl = 'http://127.0.0.1:8105/api/student/info/get_avatar/';
-  } else if (userRole.value === 'teacher') {
-    apiUrl = 'http://127.0.0.1:8105/api/teacher/info/get_avatar/';
-  } else {
-    userAvatarUrl.value = '';
-    return;
-  }
+
   try {
-    const response = await fetch(apiUrl, {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${authStore.token}`,
-        'Content-Type': 'application/json',
-      },
-    });
-    if (!response.ok) throw new Error(`获取头像失败: ${response.status}`);
-    const data = await response.json();
-    if (data && data.avatar_url) {
-      userAvatarUrl.value = data.avatar_url.startsWith('127.0.0.1') ? `http://${data.avatar_url}` : data.avatar_url;
+    // 根据用户角色调用不同的API方法
+    const response = userRole.value === 'student' 
+      ? await infoAPI.getstudentavatar()
+      : await infoAPI.getteacheravatar();
+
+    if (response.data && response.data.avatar_url) {
+      userAvatarUrl.value = response.data.avatar_url.startsWith('127.0.0.1') 
+        ? `http://${response.data.avatar_url}` 
+        : response.data.avatar_url;
     } else {
       userAvatarUrl.value = '';
     }
@@ -334,6 +324,7 @@ const fetchUserAvatar = async () => {
     userAvatarUrl.value = '';
   }
 };
+
 
 const toggleMyMenu = (event) => {
   if (event) {
