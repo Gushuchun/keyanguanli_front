@@ -308,7 +308,7 @@ const handleTeamCardClick = (team) => {
 
 // 创建比赛
 const createCompetition = async () => {
-  if (!newCompetition.value.title || !newCompetition.value.date || !selectedTeam.value || selectedTeachers.value.length === 0) {
+  if (!newCompetition.value.title || !newCompetition.value.date || !selectedTeam.value) {
     ElMessage.error('请填写所有必填字段')
     return
   }
