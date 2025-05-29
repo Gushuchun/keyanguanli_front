@@ -542,11 +542,11 @@ const onSubmit = async () => {
 // 注册逻辑
 const onRegister = async () => {
   // 先进行身份证验证
-  validateIdCard();
-  if (idCardError.value) {
-    ElMessage.error('请输入有效的身份证号码');
-    return;
-  }
+  // validateIdCard();
+  // if (idCardError.value) {
+  //   ElMessage.error('请输入有效的身份证号码');
+  //   return;
+  // }
 
   // 手机号验证
   validatePhone();
