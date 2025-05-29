@@ -527,7 +527,7 @@ const themeButtonTitle = computed(() => {
 }
 
 .icon-clock {
-  font-size: 18px;
+  font-size: 17px;
   margin-right: 10px;
   color: var(--icon-clock-color, #007bff);
 }
@@ -542,7 +542,7 @@ const themeButtonTitle = computed(() => {
 
 .time-segment {
   font-family: 'AlimamaShuHeiTi-Bold', 'DS-Digital', 'Courier New', Courier, monospace;
-  font-size: 18px;
+  font-size: 17px;
   color: var(--time-segment-color, #343a40);
   padding: 0 1px;
   text-align: center;
