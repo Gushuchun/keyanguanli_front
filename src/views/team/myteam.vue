@@ -1831,18 +1831,22 @@ onMounted(() => {
 }
 
 .search-bar {
-  margin-left: 37.5rem;
-  position: relative;
+  display: flex;
+  justify-content: center; /* 水平居中 */
+  margin: 1rem auto; /* 上下边距1rem，左右自动居中 */
+  width: 80%; /* 控制搜索框宽度 */
 }
 
 .search-input {
-  padding: 12px 16px;
-  border: 2px solid rgba(0, 242, 254, 0.6);
-  border-radius: 8px;
-  font-size: 16px; /* Larger font size */
-  width: 250px; /* Wider search box */
-  transition: border-color 0.2s ease-in-out;
-  background: transparent;
+  width: 100%; /* 占满父容器宽度 */
+  max-width: 500px; /* 最大宽度限制 */
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  border: 1px solid rgba(0, 242, 254, 0.5);
+  background: rgba(0, 242, 254, 0.1);
+  color: #fff;
+  font-size: 1rem;
+  transition: all 0.3s ease;
 }
 
 .search-input:focus {

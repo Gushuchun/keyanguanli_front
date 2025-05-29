@@ -1351,6 +1351,10 @@ onUnmounted(() => {
       transparent 70%);
   opacity: 0.3;
   animation: glow-pulse 2s infinite;
+  right: -50%;
+  bottom: -50%;
+  left: auto;
+  top: auto;
 }
 
 .cyber-button .content {
