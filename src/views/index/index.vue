@@ -140,11 +140,6 @@ const initChart = () => {
         textShadow: '0 0 15px var(--neon-primary)'
       }
     },
-    // color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
-    //   { offset: 0, color: '#00F7FF' },
-    //   { offset: 0.5, color: '#7B61FF' },
-    //   { offset: 1, color: '#FF00FF' }
-    // ]),
     tooltip: {
       trigger: 'axis',
       formatter: (params) => {
@@ -165,14 +160,32 @@ const initChart = () => {
     },
     xAxis: {
       type: 'category',
-      data: validData.map(item => item.name),
+       data: validData.map(item => ({
+        value: item.name || '未知学院',
+          formatter: function(value) {
+        const maxCharsPerLine = 5;
+        const regex = new RegExp(`.{1,${maxCharsPerLine}}`, 'g');
+        return value.match(regex).join('\n');
+      }
+      })),
       axisLabel: {
         color: 'var(--neon-primary)',
-        fontSize: 18,
-        rotate: 0, // 将旋转角度从45改为0
+        fontSize: 16, 
+        rotate: 0,
         margin: 15,
-        // 移除 formatter 配置，让文字正常显示
-        interval: 0 // 确保所有标签都显示
+        interval: 0,
+        rich: {
+          // a: {
+          //   lineHeight: 18,
+          //   color: 'var(--neon-primary)'
+          // }
+        },
+        formatter: function(params) {
+          const maxCharsPerLine = 5;
+          const regex = new RegExp(`.{1,${maxCharsPerLine}}`, 'g');
+          const lines = params.match(regex);
+          return lines.map(line => `{a|${line}}`).join('\n');
+        }
       },
       axisLine: {
         lineStyle: {
