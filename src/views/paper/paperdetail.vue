@@ -42,7 +42,7 @@
         <div class="team-field">
           <strong>关键词:</strong> {{ paper.keywords }}
         </div>
-        <div class="team-field">
+        <div class="team-field description-field">
           <strong>摘要:</strong> {{ paper.abstract }}
         </div>
       </div>
@@ -1416,4 +1416,10 @@ select:focus {
   background: rgba(255, 255, 255, 0.1) !important;
   color: #fff !important;
 }
+
+.description-field {
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+}
+
 </style>

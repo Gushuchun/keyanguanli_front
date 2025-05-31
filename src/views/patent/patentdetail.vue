@@ -38,8 +38,8 @@
           <a :href="getFullFileUrl(patent.file)" target="_blank" rel="noopener noreferrer" v-if="patent.file">查看文件</a>
           <span v-else>无文件</span>
         </div>
-        <div class="team-field">
-          <strong>描述:</strong> {{ patent.description }}
+        <div class="team-field description-field">
+          <strong>描述:</strong>{{ patent.description }}
         </div>
       </div>
 
@@ -1587,4 +1587,10 @@ select:focus {
   margin-bottom: 1rem;
   max-width: 100%;
 }
+
+.description-field {
+  grid-column: 1 / -1;
+  margin-bottom: 0.5rem;
+}
+
 </style>
