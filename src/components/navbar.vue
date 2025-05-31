@@ -54,20 +54,28 @@
             <div v-if="isMyMenuVisible" class="my-menu-dropdown"
               :style="{ top: myMenuTop + 'px', left: myMenuLeft + 'px' }">
               <router-link v-if="userRole === 'student' || userRole === '队长'" to="/myteam" class="nav-link">
-                <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="团队"
+                <img :src="themeStore.currentTheme === 'light' ? teamLight : teamDark" alt="团队"
                   class="nav-icon-img" /> 我的团队
               </router-link>
               <router-link v-if="userRole === 'student' || userRole === '队长'" to="/mycompetition" class="nav-link">
-                <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="比赛"
+                <img :src="themeStore.currentTheme === 'light' ? competitionLight : competitionDark" alt="比赛"
                   class="nav-icon-img" /> 我的比赛
               </router-link>
+              <router-link v-if="userRole === 'student' || userRole === '队长'" to="/mypatent" class="nav-link">
+                <img :src="themeStore.currentTheme === 'light' ? patentLight : patentDark" alt="比赛"
+                  class="nav-icon-img" /> 我的专利
+              </router-link>
               <router-link v-if="userRole === 'teacher'" to="/myteam" class="nav-link">
-                <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="团队"
+                <img :src="themeStore.currentTheme === 'light' ? teamLight : teamDark" alt="团队"
                   class="nav-icon-img" /> 我的团队
               </router-link>
               <router-link v-if="userRole === 'teacher'" to="/mycompetition" class="nav-link">
-                <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="比赛"
+                <img :src="themeStore.currentTheme === 'light' ? competitionLight : competitionDark" alt="比赛"
                   class="nav-icon-img" /> 我的比赛
+              </router-link>
+              <router-link v-if="userRole === 'teacher'" to="/mypatent" class="nav-link">
+                <img :src="themeStore.currentTheme === 'light' ? patentLight : patentDark" alt="比赛"
+                  class="nav-icon-img" /> 我的专利
               </router-link>
               <router-link v-if="userRole === 'teacher'" to="/teacher/competition1" class="nav-link">
                 <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="论文"
@@ -120,6 +128,12 @@ import axios from 'axios'
 // 导入图片路径，以便在模板中动态绑定
 import iconButtonLightPath from '@/assets/image/icon_button.png';
 import iconButtonDarkPath from '@/assets/image/icon_button_dark.png';
+import patentLightPath from '@/assets/image/patent.png';
+import patentDarkPath from '@/assets/image/patent_dark.png';
+import competitionLightPath from '@/assets/image/competition.png';
+import competitionDarkPath from '@/assets/image/competition_dark.png';
+import teamLightPath from '@/assets/image/team.png';
+import teamDarkPath from '@/assets/image/team_dark.png';
 import searchIconLight from '@/assets/image/search.png';
 import searchIconDark from '@/assets/image/search_dark.png';
 import { infoAPI } from '@/api/info';
@@ -234,7 +248,7 @@ const clearSearch = () => {
 // 获取天气数据
 const getWeather = async () => {
   try {
-    const response = await axios.get('http://gfeljm.tianqiapi.com/api', {
+    const response = await axios.get('http://gfeljm.tianqiapi.com/api1', {
       params: {
         appid: '23562228',
         appsecret: 'eFu7G5yq',
@@ -273,6 +287,14 @@ const router = useRouter();
 const defaultAvatarUrl = new URL('@/assets/image/default_avatar.png', import.meta.url).href;
 const iconButtonLight = ref(iconButtonLightPath);
 const iconButtonDark = ref(iconButtonDarkPath);
+
+const patentLight = ref(patentLightPath);
+const patentDark = ref(patentDarkPath);
+const competitionLight = ref(competitionLightPath);
+const competitionDark = ref(competitionDarkPath);
+const teamLight = ref(teamLightPath);
+const teamDark = ref(teamDarkPath);
+
 const userAvatarUrl = ref('');
 
 const isUserLoggedIn = computed(() => !!authStore.token && !!authStore.user);
@@ -308,13 +330,13 @@ const fetchUserAvatar = async () => {
 
   try {
     // 根据用户角色调用不同的API方法
-    const response = userRole.value === 'student' 
+    const response = userRole.value === 'student'
       ? await infoAPI.getstudentavatar()
       : await infoAPI.getteacheravatar();
 
     if (response.data && response.data.avatar_url) {
-      userAvatarUrl.value = response.data.avatar_url.startsWith('127.0.0.1') 
-        ? `http://${response.data.avatar_url}` 
+      userAvatarUrl.value = response.data.avatar_url.startsWith('127.0.0.1')
+        ? `http://${response.data.avatar_url}`
         : response.data.avatar_url;
     } else {
       userAvatarUrl.value = '';
@@ -479,7 +501,7 @@ const themeButtonTitle = computed(() => {
   color: var(--navbar-brand-text-color, #2c3e50);
   font-size: 20px;
   font-weight: 600;
-  gap: 10px; 
+  gap: 10px;
   margin-left: -10px;
 }
 
@@ -839,12 +861,16 @@ const themeButtonTitle = computed(() => {
 
 .search-icon {
   position: absolute;
-  left: 10px; /* Adjust the left position */
+  left: 10px;
+  /* Adjust the left position */
   top: 50%;
   transform: translateY(-50%);
-  width: 16px; /* Set the icon width */
-  height: 16px; /* Set the icon height */
-  pointer-events: none; /* Make the icon non - clickable */
+  width: 16px;
+  /* Set the icon width */
+  height: 16px;
+  /* Set the icon height */
+  pointer-events: none;
+  /* Make the icon non - clickable */
 }
 
 .search-input:focus {
