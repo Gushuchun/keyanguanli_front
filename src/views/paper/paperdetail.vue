@@ -9,102 +9,81 @@
       <div class="particle-trail"></div>
     </div>
 
+
     <div class="info-panel">
-      <!-- 专利信息 -->
+      <!-- 论文信息 -->
       <div class="section-title">
-        专利信息
-        <button class="inline-edit-button cyber-button primary" @click="isEditModalVisible = true" data-text="修改团队信息">
+        论文信息
+        <button class="inline-edit-button cyber-button primary" @click="isEditModalVisible = true" data-text="修改论文信息">
           <span class="glow"></span>
           <span class="content">
-            <img :src="changeInfoIconSrc" alt="修改专利信息" class="action-icon" />
+            <img :src="changeInfoIconSrc" alt="修改论文信息" class="action-icon" />
           </span>
         </button>
       </div>
       <div class="team-detail-grid">
         <div class="team-field">
-          <strong>专利名:</strong> {{ patent.name }}
+          <strong>论文标题:</strong> {{ paper.title }}
         </div>
         <div class="team-field">
-          <strong>专利号:</strong> {{ patent.number }}
+          <strong>论文编号:</strong> {{ paper.number }}
         </div>
         <div class="team-field">
-          <strong>类型:</strong> {{ patent.patent_type }}
+          <strong>期刊:</strong> {{ paper.journal }}
         </div>
         <div class="team-field">
-          <strong>申请日期:</strong> {{ patent.date }}
+          <strong>发表日期:</strong> {{ paper.publish_date }}
         </div>
         <div class="team-field">
           <strong>文件:</strong>
-          <a :href="getFullFileUrl(patent.file)" target="_blank" rel="noopener noreferrer" v-if="patent.file">查看文件</a>
+          <a :href="getFullFileUrl(paper.file)" target="_blank" rel="noopener noreferrer" v-if="paper.file">查看文件</a>
           <span v-else>无文件</span>
         </div>
         <div class="team-field">
-          <strong>描述:</strong> {{ patent.description }}
+          <strong>关键词:</strong> {{ paper.keywords }}
+        </div>
+        <div class="team-field">
+          <strong>摘要:</strong> {{ paper.abstract }}
         </div>
       </div>
 
-      <!-- 申请人信息 -->
-      <div class="section-title">
-        申请人
-        <button class="inline-edit-button cyber-button primary" @click="isApplicantModalVisible = true"
-          data-text="编辑申请人">
-          <span class="glow"></span>
-          <span class="content">
-            <img :src="changeInfoIconSrc" alt="编辑申请人" class="action-icon" />
-          </span>
-        </button>
-      </div>
-      <div class="team-detail-grid">
-        <div class="team-field">
-          <strong>姓名:</strong> {{ patent.applicant_name }}
-        </div>
-        <div class="team-field">
-          <strong>电话:</strong> {{ patent.applicant_phone }}
-        </div>
-        <div class="team-field">
-          <strong>邮箱:</strong> {{ patent.applicant_email }}
-        </div>
-      </div>
 
-      <!-- 发明人列表 -->
       <div class="section-title">
-        发明人
-        <button class="inline-edit-button cyber-button primary" @click="showEditInventorsModal" data-text="编辑发明人">
+        作者
+        <button class="inline-edit-button cyber-button primary" @click="showEditAuthorsModal" data-text="编辑作者">
           <span class="glow"></span>
           <span class="content">
-            <img :src="changeInfoIconSrc" alt="编辑发明人" class="action-icon" />
+            <img :src="changeInfoIconSrc" alt="编辑作者" class="action-icon" />
           </span>
         </button>
       </div>
       <div class="members-grid">
-        <div v-for="inventor in patent.inventors" :key="inventor.id" class="member-card">
+        <div v-for="author in paper.authors" :key="author.id" class="member-card">
           <div class="member-info">
-            <p><strong>姓名:</strong> {{ inventor.name }}</p>
-            <p><strong>联系方式:</strong> {{ inventor.phone }}</p>
-            <p><strong>邮箱:</strong> {{ inventor.email }}</p>
+            <p><strong>姓名:</strong> {{ author.name }}</p>
+            <p><strong>联系方式:</strong> {{ author.phone }}</p>
+            <p><strong>邮箱:</strong> {{ author.email }}</p>
           </div>
         </div>
       </div>
 
-      <!-- 编辑发明人弹窗 -->
-      <Teleport to="body">
-        <div v-if="isEditInventorsModalVisible" class="edit-members-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="hideEditInventorsModal">
-            <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>发明人管理</h2>
 
-              <!-- 发明人列表 -->
+      <Teleport to="body">
+        <div v-if="isEditAuthorsModalVisible" class="edit-members-modal" :class="{ 'dark': themeStore.isDark }">
+          <div class="modal-overlay" @click.self="hideEditAuthorsModal">
+            <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
+              <h2>作者管理</h2>
               <div class="members-list-container">
                 <div class="members-list">
-                  <div v-for="inventor in patent.inventors" :key="inventor.id" class="member-item">
-                    <span class="member-name">{{ inventor.name }}</span>
+                  <div v-for="author in paper.authors" :key="author.id" class="member-item">
+                    <span class="member-name">{{ author.name }}</span>
                     <div class="member-actions">
-                      <button class="remove-button cyber-button secondary" @click="showEditInventorModal(inventor)">
+                      <button class="remove-button cyber-button secondary" @click="showEditAuthorModal(author)">
                         <span class="content">
                           <img :src="editIconSrc" alt="编辑" class="action-icon" />
                         </span>
                       </button>
-                      <button class="remove-button cyber-button secondary" @click="deleteInventor(inventor)">
+                      <button class="remove-button cyber-button secondary" @click="deleteAuthor(author)">
                         <span class="content">
                           <img :src="removememberIconSrc" alt="移除" class="action-icon" />
                         </span>
@@ -113,15 +92,12 @@
                   </div>
                 </div>
               </div>
-
-
-              <!-- 添加发明人按钮 -->
               <div class="add-member-button">
-                <button class="cyber-button primary" @click="isInventorModalVisible = true">
+                <button class="cyber-button primary" @click="isAuthorModalVisible = true">
                   <span class="content">
                     <img :src="invitenewstudentIconSrc" alt="添加" class="action-icon" />
                   </span>
-                  <span class="tooltip">添加新发明人</span>
+                  <span class="tooltip">添加新作者</span>
                 </button>
               </div>
             </div>
@@ -130,106 +106,73 @@
       </Teleport>
 
       <Teleport to="body">
-        <div v-if="isEditInventorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="hideEditInventorModal">
+        <div v-if="isEditAuthorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
+          <div class="modal-overlay" @click.self="hideEditAuthorModal">
             <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>编辑发明人</h2>
-              <form @submit.prevent="updateInventor">
+              <h2>编辑作者</h2>
+              <form @submit.prevent="updateAuthor">
                 <div class="form-group">
-                  <label for="inventorName">姓名:</label>
-                  <input type="text" id="inventorName" v-model="editInventorData.name" required />
+                  <label for="authorName">姓名:</label>
+                  <input type="text" id="authorName" v-model="editAuthorData.name" required />
                 </div>
                 <div class="form-group">
-                  <label for="inventorPhone">电话:</label>
-                  <input type="text" id="inventorPhone" v-model="editInventorData.phone" required />
+                  <label for="authorPhone">电话:</label>
+                  <input type="text" id="authorPhone" v-model="editAuthorData.phone" required />
                 </div>
                 <div class="form-group">
-                  <label for="inventorEmail">邮箱:</label>
-                  <input type="email" id="inventorEmail" v-model="editInventorData.email" required />
+                  <label for="authorEmail">邮箱:</label>
+                  <input type="email" id="authorEmail" v-model="editAuthorData.email" required />
                 </div>
                 <div class="modal-actions">
                   <button type="submit">保存</button>
-                  <button type="button" @click="hideEditInventorModal">取消</button>
+                  <button type="button" @click="hideEditAuthorModal">取消</button>
                 </div>
               </form>
             </div>
           </div>
         </div>
       </Teleport>
+
 
       <!-- 编辑专利模态框 -->
       <Teleport to="body">
         <div v-if="isEditModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
           <div class="modal-overlay" @click.self="isEditModalVisible = false">
             <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>编辑专利信息</h2>
-              <div class="form-container">
-                <form @submit.prevent="updatePatent">
-                  <!-- 所有表单内容保持不变 -->
-                  <div class="form-group">
-                    <label>专利名称:</label>
-                    <input type="text" v-model="editPatentData.name" required />
-                  </div>
-                  <div class="form-group">
-                    <label>专利号:</label>
-                    <input type="text" v-model="editPatentData.number" required />
-                  </div>
-                  <div class="form-group">
-                    <label>申请日期:</label>
-                    <input type="date" v-model="editPatentData.date" required />
-                  </div>
-                  <div class="form-group">
-                    <label>专利类型:</label>
-                    <select v-model="editPatentData.patent_type" required>
-                      <option value="发明专利">发明专利</option>
-                      <option value="实用新型专利">实用新型专利</option>
-                      <option value="外观设计专利">外观设计专利</option>
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>描述:</label>
-                    <textarea v-model="editPatentData.description" required class="form-input"></textarea>
-                  </div>
-                  <div class="form-group">
-                    <label>文件:</label>
-                    <input type="file" id="patentFile" @change="handleFileChange" accept=".pdf,.doc,.docx" />
-                    <div v-if="editPatentData.file" class="file-info">
-                      当前文件: {{ editPatentData.file }}
-                    </div>
-                  </div>
-                  <div class="modal-actions">
-                    <button type="submit">保存</button>
-                    <button type="button" @click="isEditModalVisible = false">取消</button>
-                  </div>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Teleport>
-
-      <!-- 编辑申请人模态框 -->
-      <Teleport to="body">
-        <div v-if="isApplicantModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="isApplicantModalVisible = false">
-            <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>编辑申请人信息</h2>
-              <form @submit.prevent="updateApplicant">
+              <h2>编辑论文信息</h2>
+              <form @submit.prevent="updatePaper">
                 <div class="form-group">
-                  <label>姓名:</label>
-                  <input type="text" v-model="editApplicantData.name" required />
+                  <label>论文标题:</label>
+                  <input type="text" v-model="editPaperData.title" required />
                 </div>
                 <div class="form-group">
-                  <label>电话:</label>
-                  <input type="text" v-model="editApplicantData.phone" required />
+                  <label>论文编号:</label>
+                  <input type="text" v-model="editPaperData.number" required />
                 </div>
                 <div class="form-group">
-                  <label>邮箱:</label>
-                  <input type="email" v-model="editApplicantData.email" required />
+                  <label>期刊:</label>
+                  <input type="text" v-model="editPaperData.journal" required />
+                </div>
+                <div class="form-group">
+                  <label>发表日期:</label>
+                  <input type="date" v-model="editPaperData.publish_date" required />
+                </div>
+                <div class="form-group">
+                  <label>摘要:</label>
+                  <textarea v-model="editPaperData.abstract" required class="form-input"></textarea>
+                </div>
+                <div class="form-group">
+                  <label>关键词:</label>
+                  <input type="text" v-model="editPaperData.keywords" required />
+                </div>
+                <div class="form-group">
+                  <label>论文文件:</label>
+                  <input type="file" @change="handleFileChange" accept=".pdf,.doc,.docx" />
+                  <small v-if="editPaperData.file">当前文件: {{ editPaperData.file.name || editPaperData.file }}</small>
                 </div>
                 <div class="modal-actions">
                   <button type="submit">保存</button>
-                  <button type="button" @click="isApplicantModalVisible = false">取消</button>
+                  <button type="button" @click="isEditModalVisible = false">取消</button>
                 </div>
               </form>
             </div>
@@ -237,28 +180,27 @@
         </div>
       </Teleport>
 
-      <!-- 添加发明人模态框 -->
       <Teleport to="body">
-        <div v-if="isInventorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="isInventorModalVisible = false">
+        <div v-if="isAuthorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
+          <div class="modal-overlay" @click.self="isAuthorModalVisible = false">
             <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>添加发明人</h2>
-              <form @submit.prevent="addInventor">
+              <h2>添加作者</h2>
+              <form @submit.prevent="addAuthor">
                 <div class="form-group">
                   <label>姓名:</label>
-                  <input type="text" v-model="newInventor.name" required />
+                  <input type="text" v-model="newAuthor.name" required />
                 </div>
                 <div class="form-group">
                   <label>电话:</label>
-                  <input type="text" v-model="newInventor.phone" required />
+                  <input type="text" v-model="newAuthor.phone" required />
                 </div>
                 <div class="form-group">
                   <label>邮箱:</label>
-                  <input type="email" v-model="newInventor.email" required />
+                  <input type="email" v-model="newAuthor.email" required />
                 </div>
                 <div class="modal-actions">
                   <button type="submit">添加</button>
-                  <button type="button" @click="isInventorModalVisible = false">取消</button>
+                  <button type="button" @click="isAuthorModalVisible = false">取消</button>
                 </div>
               </form>
             </div>
@@ -273,10 +215,10 @@
 
       <div class="team-action-buttons-container">
         <div class="team-action-buttons">
-          <button class="cyber-button danger" @click="deletePatent" data-text="删除专利">
+          <button class="cyber-button danger" @click="deletePaper" data-text="删除论文">
             <span class="glow"></span>
             <span class="content">
-              <img :src="dismissIconSrc" alt="删除专利" class="action-icon" />
+              <img :src="dismissIconSrc" alt="删除论文" class="action-icon" />
             </span>
           </button>
         </div>
@@ -289,102 +231,102 @@
 <script setup>
 import { ref, onMounted, computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { patentAPI } from '@/api/patent'
+import { paperAPI } from '@/api/paper'
 import { useThemeStore } from '@/stores/theme'
 import { ElMessage, ElMessageBox } from 'element-plus'
 
 const route = useRoute()
 const router = useRouter()
 const themeStore = useThemeStore()
-const patent = ref({})
+const paper = ref({
+  id: null,
+  sn: '',
+  number: '',
+  title: '',
+  journal: '',
+  publish_date: '',
+  abstract: '',
+  keywords: '',
+  file: '',
+  applicant_name: '',
+  applicant_email: '',
+  applicant_sn: '',
+  authors: []
+})
+
+const loading = ref(false)
 const isEditModalVisible = ref(false)
-const editPatentData = ref({})
-const isInventorModalVisible = ref(false)
-const isApplicantModalVisible = ref(false)
-const newInventor = ref({ name: '', phone: '', email: '' })
-const editApplicantData = ref({ name: '', phone: '', email: '' })
-const file = ref(null)
-
-const handleFileChange = (event) => {
-  file.value = event.target.files[0]
-}
+const editPaperData = ref({})
+const isAuthorModalVisible = ref(false)
+const newAuthor = ref({ name: '', phone: '', email: '' })
+const editApplicantData = ref({ name: '', email: '' })
+const isEditAuthorsModalVisible = ref(false)
+const isEditAuthorModalVisible = ref(false)
+const editAuthorData = ref({})
 
 
-// 获取专利详情
-const fetchPatentDetail = async () => {
+// 获取论文详情
+const fetchPaperDetail = async () => {
   try {
-    const response = await patentAPI.get_patent_detail(route.params.id)
-    patent.value = response.data
-    editPatentData.value = { ...response.data }
+    loading.value = true
+    const response = await paperAPI.get_paper_detail(route.params.id)
+    paper.value = response.data
+    editPaperData.value = { ...response.data }
     editApplicantData.value = {
       name: response.data.applicant_name,
-      phone: response.data.applicant_phone,
       email: response.data.applicant_email
     }
   } catch (error) {
-    console.error('获取专利详情失败:', error)
-    ElMessage.error('获取专利详情失败')
+    console.error('获取论文详情失败:', error)
+    ElMessage.error('获取论文详情失败')
+  } finally {
+    loading.value = false
   }
 }
 
-// 更新专利信息
-const updatePatent = async () => {
+
+// 更新论文信息
+const updatePaper = async () => {
   try {
     const formData = new FormData()
-    formData.append('name', editPatentData.value.name)
-    formData.append('number', editPatentData.value.number)
-    formData.append('date', editPatentData.value.date)
-    formData.append('patent_type', editPatentData.value.patent_type)
-    formData.append('description', editPatentData.value.description)
+    formData.append('title', editPaperData.value.title)
+    formData.append('number', editPaperData.value.number)
+    formData.append('journal', editPaperData.value.journal)
+    formData.append('publish_date', editPaperData.value.publish_date)
+    formData.append('abstract', editPaperData.value.abstract)
+    formData.append('keywords', editPaperData.value.keywords)
 
-    if (file.value) {
-      formData.append('file', file.value)
+    // 如果有新文件则添加
+    if (editPaperData.value.file instanceof File) {
+      formData.append('file', editPaperData.value.file)
     }
 
-    const response = await patentAPI.update_patent(patent.value.id, formData, {
+    response = await paperAPI.update_paper(paper.value.id, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-
-    if (response.status === 200) {
-      ElMessage.success('专利信息更新成功')
+    if (response.status == 200) {
+      ElMessage.success('论文信息更新成功')
+      isEditModalVisible.value = false
     } else {
-      ElMessage.error('专利信息更新失败')
+      // console.log(response.data.message)
+      ElMessage.error('论文信息更新失败')
     }
-    fetchPatentDetail()
-    isEditModalVisible.value = false
-    file.value = null
+
+    fetchPaperDetail()
   } catch (error) {
-    console.error('更新专利信息失败:', error)
-    ElMessage.error('更新专利信息失败')
+    console.error('更新论文信息失败:', error)
+    ElMessage.error('更新论文信息失败')
   }
 }
 
-// 更新申请人信息
-const updateApplicant = async () => {
-  try {
-    const data = {
-      applicant_name: editApplicantData.value.name,
-      applicant_phone: editApplicantData.value.phone,
-      applicant_email: editApplicantData.value.email
-    }
 
-    await patentAPI.update_patent(patent.value.id, data)
-    ElMessage.success('申请人信息更新成功')
-    fetchPatentDetail()
-    isApplicantModalVisible.value = false
-  } catch (error) {
-    console.error('更新申请人信息失败:', error)
-    ElMessage.error('更新申请人信息失败')
-  }
-}
-
-// 删除专利
-const deletePatent = async () => {
+// 删除论文
+const deletePaper = async () => {
   try {
     await ElMessageBox.confirm(
-      '确定要删除这个专利吗？此操作不可恢复！',
+      '确定要删除这篇论文吗？此操作不可恢复！',
       '警告',
       {
         confirmButtonText: '确定',
@@ -394,48 +336,42 @@ const deletePatent = async () => {
       }
     )
 
-    const response = await patentAPI.delete_patent(patent.value.id)
-    if (response.data.code == 200) {
-      ElMessage.success('专利已删除')
-      router.back() // 返回上一页
-    } else {
-      console.error('专利删除失败:', response.data.message)
-      ElMessage.error('专利删除失败')
-    }
+    await paperAPI.delete_paper(paper.value.id)
+    ElMessage.success('论文已删除')
+    router.back()
   } catch (error) {
     if (error === 'cancel') {
       ElMessage.info('已取消删除操作')
     } else {
-      console.error('删除专利失败:', error)
-      ElMessage.error('删除专利失败，请稍后再试。')
+      console.error('删除论文失败:', error)
+      ElMessage.error('删除论文失败，请稍后再试。')
     }
   }
 }
 
-// 添加发明人
-const addInventor = async () => {
+// 添加作者
+const addAuthor = async () => {
   try {
     const data = {
-      ...newInventor.value,
-      id: patent.value.id
+      ...newAuthor.value
     }
-    await patentAPI.create_patent_inventors(patent.value.id, data)
-    ElMessage.success('发明人添加成功')
-    fetchPatentDetail()
-    isInventorModalVisible.value = false
-    newInventor.value = { name: '', phone: '', email: '' }
+    await paperAPI.create_paper_inventors(paper.value.id, data)
+    ElMessage.success('作者添加成功')
+    fetchPaperDetail()
+    isAuthorModalVisible.value = false
+    newAuthor.value = { name: '', phone: '', email: '' }
   } catch (error) {
-    console.error('添加发明人失败:', error)
-    ElMessage.error('添加发明人失败')
+    console.error('添加作者失败:', error)
+    ElMessage.error('添加作者失败')
   }
 }
 
 
-// 删除发明人
-const deleteInventor = async (inventor) => {
+// 删除作者
+const deleteAuthor = async (author) => {
   try {
     await ElMessageBox.confirm(
-      `确定要移除发明人 ${inventor.name} 吗？`,
+      `确定要移除作者 ${author.name} 吗？`,
       '提示',
       {
         confirmButtonText: '确定',
@@ -444,19 +380,13 @@ const deleteInventor = async (inventor) => {
         center: true
       }
     )
-    const response = await patentAPI.delete_patent_inventors(patent.value.id, { data: { id: inventor.id } })
-    if (response.data.code === 200) {
-      ElMessage.success('发明人删除成功')
-      fetchPatentDetail()
-    } else {
-      console.error('删除发明人失败:', response.data.message)
-      ElMessage.error('删除发明人失败')
-    }
-    fetchPatentDetail()
+    await paperAPI.delete_paper_inventors(paper.value.id, { data: { id: author.id } })
+    ElMessage.success('作者删除成功')
+    fetchPaperDetail()
   } catch (error) {
     if (error !== 'cancel') {
-      console.error('删除发明人失败:', error)
-      ElMessage.error('删除发明人失败')
+      console.error('删除作者失败:', error)
+      ElMessage.error('删除作者失败')
     }
   }
 }
@@ -477,53 +407,44 @@ const getFullFileUrl = (filePath) => {
   return `http://${filePath}`
 }
 
-const isEditInventorsModalVisible = ref(false)
-const isEditInventorModalVisible = ref(false)
-const editInventorData = ref({})
-
-// 显示编辑发明人弹窗
-const showEditInventorsModal = () => {
-  isEditInventorsModalVisible.value = true
+// 显示/隐藏作者管理弹窗
+const showEditAuthorsModal = () => {
+  isEditAuthorsModalVisible.value = true
+}
+const hideEditAuthorsModal = () => {
+  isEditAuthorsModalVisible.value = false
 }
 
-// 隐藏编辑发明人弹窗
-const hideEditInventorsModal = () => {
-  isEditInventorsModalVisible.value = false
+// 显示/隐藏编辑作者弹窗
+const showEditAuthorModal = (author) => {
+  editAuthorData.value = { ...author }
+  isEditAuthorModalVisible.value = true
+}
+const hideEditAuthorModal = () => {
+  isEditAuthorModalVisible.value = false
 }
 
-// 显示编辑单个发明人弹窗
-const showEditInventorModal = (inventor) => {
-  editInventorData.value = { ...inventor }
-  isEditInventorModalVisible.value = true
-}
-
-// 隐藏编辑单个发明人弹窗
-const hideEditInventorModal = () => {
-  isEditInventorModalVisible.value = false
-}
-
-// 更新发明人信息
-const updateInventor = async () => {
+// 更新作者信息
+const updateAuthor = async () => {
   try {
     const payload = {
-      id: editInventorData.value.id, // 发明人ID
-      name: editInventorData.value.name,
-      phone: editInventorData.value.phone,
-      email: editInventorData.value.email
+      id: editAuthorData.value.id,
+      name: editAuthorData.value.name,
+      phone: editAuthorData.value.phone,
+      email: editAuthorData.value.email
     }
-    // 调用API更新发明人信息
-    const response = await patentAPI.update_patent_inventors(patent.value.id, payload)
-    if (response.data.code === 200) {
-      ElMessage.success('发明人信息更新成功')
-      fetchPatentDetail() // 重新获取专利详情
-      hideEditInventorModal()
+    const response = await paperAPI.update_paper_inventors(paper.value.id, payload)
+    if (response.data.code == 200) {
+      ElMessage.success('作者信息更新成功')
     } else {
-      console.log(response.data.message)
-      ElMessage.error('更新发明人信息失败')
+      console.log('更新作者信息失败:', response.data.message)
+      ElMessage.error('更新作者信息失败')
     }
+    fetchPaperDetail()
+    hideEditAuthorModal()
   } catch (error) {
-    console.error('更新发明人失败:', error)
-    ElMessage.error('更新发明人失败')
+    console.error('更新作者失败:', error)
+    ElMessage.error('更新作者失败')
   }
 }
 
@@ -556,10 +477,17 @@ const dismissIconSrc = computed(() => {
     : new URL('@/assets/image/dismiss_team.png', import.meta.url).href
 })
 
+const handleFileChange = (event) => {
+  const file = event.target.files[0]
+  if (file) {
+    editPaperData.value.file = file
+  }
+}
+
 
 
 onMounted(() => {
-  fetchPatentDetail()
+  fetchPaperDetail()
 })
 </script>
 
@@ -1032,20 +960,40 @@ onMounted(() => {
   align-items: center;
 }
 
-.modal-content {
+.modal-content,
+.modal-content-dark {
   background: rgba(255, 255, 255, 0.95);
-  padding: 2rem;
+  padding: 1rem;
   border-radius: 20px;
   width: 400px;
   max-width: 90%;
+  max-height: 80vh;
+  /* 限制最大高度 */
+  overflow-y: auto;
+  /* 添加垂直滚动 */
   box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
   position: relative;
   animation: fadeIn 0.3s ease-in-out;
+  display: flex;
+  flex-direction: column;
 }
 
-.modal-content h2 {
+.modal-content h2,
+.modal-content-dark h2 {
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 1rem;
+  position: sticky;
+  top: 0;
+  background: inherit;
+  padding: 0.5rem 0;
+  z-index: 2;
+}
+
+.modal-content form,
+.modal-content-dark form {
+  flex: 1;
+  overflow-y: auto;
+  /* padding-top: 0.5rem; */
 }
 
 .modal-content-dark {
@@ -1063,8 +1011,6 @@ onMounted(() => {
 
 .modal-content-dark .form-group label {
   color: #00f2fe !important;
-  width: 90%;
-  margin: 0 auto;
 }
 
 .modal-content-dark .form-group input {
@@ -1099,19 +1045,13 @@ onMounted(() => {
 }
 
 .form-group {
-  margin-top: 1.5rem;
-}
-
-.modal-content-dark .form-group {
-  margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 600;
-  width: 80%;
-  margin-left: 1.5rem;
 }
 
 .form-group input {
@@ -1130,39 +1070,10 @@ onMounted(() => {
   box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
 }
 
-.form-group input[type="file"] {
-  width: 90.5%;
-  padding: 0.7rem;
-  border-radius: 10px;
-  border: 1px solid rgba(0, 242, 254, 0.3);
-  background: #c7c3c3;
-  color: #333;
-  margin-top: 0.5rem;
-}
-
-.file-info {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #666;
-}
-
-/* 夜间模式文件上传样式 */
-.modal-content-dark .form-group input[type="file"] {
-  background: rgba(255, 255, 255, 0.1);
-  color: #fff;
-}
-
-.modal-content-dark .file-info {
-  color: #ccc;
-}
-
 .modal-actions {
   display: flex;
   justify-content: space-between;
   margin-top: 1.5rem;
-  margin-bottom: 1.5rem;
-  width:95%;
-  margin-left: 0.5rem;
 }
 
 .modal-actions button {
@@ -1257,17 +1168,14 @@ onMounted(() => {
   z-index: 2;
   margin-bottom: 1rem;
   border-bottom: 1px solid rgba(0, 242, 254, 0.2);
-  text-align: center;
-  /* 添加居中样式 */
-  width: 100%;
-  /* 确保标题宽度占满容器 */
 }
 
 .members-list-container {
   flex: 1;
   overflow-y: auto;
-  margin-bottom: 0.5rem;
-  max-height: calc(60vh - 150px);
+  margin-bottom: 0.5rem; /* 减小底部间距 */
+  max-height: calc(60vh - 150px); /* 限制列表最大高度 */
+  z-index: 300;
 }
 
 .members-list {
@@ -1453,6 +1361,7 @@ onMounted(() => {
 input[type="text"],
 input[type="date"],
 input[type="email"],
+input[type="file"],
 select,
 textarea {
   width: 90%;
@@ -1460,9 +1369,25 @@ textarea {
   border-radius: 8px;
   border: 1px solid rgba(0, 242, 254, 0.3);
   background: #c7c3c3;
+  /* 灰白色背景 */
   color: #333;
+  /* 深色文字 */
   transition: none;
   resize: vertical;
+}
+
+select {
+  width: 96.5%;
+  appearance: none;
+  background-repeat: no-repeat;
+  background-position: right 0.8rem center;
+  background-size: 1rem;
+}
+
+select:focus {
+  outline: none;
+  border-color: #00f2fe;
+  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
 }
 
 .form-group textarea {
@@ -1480,111 +1405,15 @@ textarea {
   /* 设置最小高度 */
 }
 
-.form-group input[type="text"],
-.form-group input[type="date"],
-.form-group input[type="email"],
-.form-group select,
-.form-group textarea {
-  width: 80%;
-  /* 从100%改为90% */
-  margin-left: 1.5rem;
-  /* 添加自动外边距实现居中 */
-  padding: 0.8rem;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 242, 254, 0.3);
-  background: #c7c3c3;
-  color: #333;
-  transition: none;
-  resize: vertical;
-}
-
-/* 夜间模式样式 */
-.modal-content-dark .form-group input[type="text"],
-.modal-content-dark .form-group input[type="date"],
-.modal-content-dark .form-group input[type="email"],
-.modal-content-dark .form-group select,
-.modal-content-dark .form-group textarea {
-  width: 85%;
-  margin-left: 1rem;
-  margin-top:5px;
-}
-
-/* 文件上传输入框特殊样式 */
-.form-group input[type="file"] {
-  width: 90%;
-  /* 从90.5%改为90% */
-  margin: 0.5rem auto 0;
-  /* 添加上边距和自动外边距 */
-}
-
-select {
-  width: 96.5%;
-  appearance: none;
-  background-repeat: no-repeat;
-  background-position: right 0.8rem center;
-  background-size: 1rem;
-}
-
-select:focus {
-  outline: none;
-  border-color: #00f2fe;
-  box-shadow: 0 0 10px rgba(0, 242, 254, 0.5);
-}
-
 /* 白天模式下的样式 */
-.modal-content-dark .form-group select,
 .modal-content .form-group textarea {
   background: #c7c3c3 !important;
   color: #333 !important;
 }
 
 /* 夜间模式下的样式 */
-.modal-content-dark .form-group select,
 .modal-content-dark .form-group textarea {
   background: rgba(255, 255, 255, 0.1) !important;
   color: #fff !important;
-}
-
-.edit-team-modal .modal-content,
-.edit-team-modal .modal-content-dark {
-  max-height: 90vh;
-  overflow: hidden;
-  /* 改为hidden，由内部容器处理滚动 */
-  padding: 0;
-  /* 移除内边距，由内部元素控制 */
-  width: 400px;
-  display: flex;
-  flex-direction: column;
-}
-
-.edit-team-modal h2 {
-  position: sticky;
-  top: 0;
-  background: inherit;
-  padding: 1.5rem 1.5rem 1rem;
-  /* 调整内边距 */
-  z-index: 10;
-  /* 提高z-index确保标题在最上层 */
-  margin: 0;
-  border-bottom: 1px solid rgba(0, 242, 254, 0.2);
-  text-align: center;
-  width: 90%;
-  backdrop-filter: blur(5px);
-  /* 添加模糊效果增强可读性 */
-}
-
-.edit-team-modal .form-container {
-  flex: 1;
-  overflow-y: auto;
-  padding: 0 1.5rem 1.5rem;
-  /* 调整内边距 */
-  margin-top: -1rem;
-  /* 抵消标题的底部内边距 */
-}
-
-/* 确保表单元素不会超出容器 */
-.edit-team-modal .form-group {
-  margin-bottom: 1rem;
-  max-width: 100%;
 }
 </style>

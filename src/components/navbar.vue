@@ -53,6 +53,7 @@
           <Teleport to="body">
             <div v-if="isMyMenuVisible" class="my-menu-dropdown"
               :style="{ top: myMenuTop + 'px', left: myMenuLeft + 'px' }">
+              <!-- 学生模块 -->
               <router-link v-if="userRole === 'student' || userRole === '队长'" to="/myteam" class="nav-link">
                 <img :src="themeStore.currentTheme === 'light' ? teamLight : teamDark" alt="团队"
                   class="nav-icon-img" /> 我的团队
@@ -62,9 +63,14 @@
                   class="nav-icon-img" /> 我的比赛
               </router-link>
               <router-link v-if="userRole === 'student' || userRole === '队长'" to="/mypatent" class="nav-link">
-                <img :src="themeStore.currentTheme === 'light' ? patentLight : patentDark" alt="比赛"
+                <img :src="themeStore.currentTheme === 'light' ? patentLight : patentDark" alt="专利"
                   class="nav-icon-img" /> 我的专利
               </router-link>
+              <router-link v-if="userRole === 'student' || userRole === '队长'" to="/mypaper" class="nav-link">
+                <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="论文"
+                  class="nav-icon-img" /> 我的论文
+              </router-link>
+              <!-- 老师模块 -->
               <router-link v-if="userRole === 'teacher'" to="/myteam" class="nav-link">
                 <img :src="themeStore.currentTheme === 'light' ? teamLight : teamDark" alt="团队"
                   class="nav-icon-img" /> 我的团队
@@ -74,10 +80,10 @@
                   class="nav-icon-img" /> 我的比赛
               </router-link>
               <router-link v-if="userRole === 'teacher'" to="/mypatent" class="nav-link">
-                <img :src="themeStore.currentTheme === 'light' ? patentLight : patentDark" alt="比赛"
+                <img :src="themeStore.currentTheme === 'light' ? patentLight : patentDark" alt="专利"
                   class="nav-icon-img" /> 我的专利
               </router-link>
-              <router-link v-if="userRole === 'teacher'" to="/teacher/competition1" class="nav-link">
+              <router-link v-if="userRole === 'teacher'" to="/mypaper" class="nav-link">
                 <img :src="themeStore.currentTheme === 'light' ? iconButtonLight : iconButtonDark" alt="论文"
                   class="nav-icon-img" /> 我的论文
               </router-link>

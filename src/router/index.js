@@ -11,6 +11,8 @@ import studentinfo from '@/views/info/studentinfo.vue'
 import teacherinfo from '@/views/info/teacherinfo.vue'
 import mypatent from '@/views/patent/mypatent.vue'
 import patentdetail from '@/views/patent/patentdetail.vue'
+import mypaper  from '@/views/paper/mypaper.vue'
+import paperdetail from '@/views/paper/paperdetail.vue'
 
 const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
@@ -83,6 +85,16 @@ const router = createRouter({
       path: '/patent/detail/:id',
       name: 'patentDetail',
       component: patentdetail
+    },
+    {
+      path: '/mypaper/',
+      name:'mypaper',
+      component: mypaper
+    },
+    {
+      path: '/paper/detail/:id',
+      name: 'paperDetail',
+      component: paperdetail
     }
   ]
 })
