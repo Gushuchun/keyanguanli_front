@@ -4,7 +4,7 @@
       <div class="navbar-section navbar-brand-section">
         <router-link to="/index" class="navbar-brand">
           <img src="@/assets/image/gdou_logo.png" alt="Logo" class="brand-logo" />
-          <span class="brand-text">双创团队成果管理系统</span>
+          <span class="brand-text">团队成果管理系统</span>
         </router-link>
         <div class="time-date-display">
           <span class="icon-clock">🕒</span>
@@ -518,7 +518,7 @@ const themeButtonTitle = computed(() => {
 }
 
 .navbar-brand .brand-text {
-  font-size: 15px;
+  font-size: 17px;
   transition: opacity 0.2s ease-out;
 }
 
