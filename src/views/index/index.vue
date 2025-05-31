@@ -522,7 +522,8 @@ const switchPage = (targetPage) => {
 .competition-item {
   font-size: 1.1rem;
   padding: 0.8rem 1rem;
-  margin: 2rem 0;
+  height: 80px;
+  /* margin-bottom: 5px; */
   border-radius: 8px;
   color: var(--neon-secondary);
   background: color-mix(in srgb, var(--neon-primary) 10%, transparent);
