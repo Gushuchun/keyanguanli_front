@@ -13,10 +13,10 @@
                 </span>
             </button>
         </div>
-        <div class="search-bar">
+        <!-- <div class="search-bar">
             <input type="text" v-model="searchQuery" @input="debouncedSearch" placeholder="搜索论文名称"
                 class="search-input" />
-        </div>
+        </div> -->
         <div class="dynamic-divider">
             <div class="energy-wave"></div>
             <div class="glow-line"></div>
