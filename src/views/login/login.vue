@@ -1,6 +1,6 @@
 <template>
   <div class="login-container" :class="{ 'dark': themeStore.isDark }">
-    <h1 class="system-title">广东海洋大学科研管理平台</h1>
+    <h1 class="system-title">广东海洋大学双创团队成果管理系统</h1>
     <div class="login-wrapper">
       <transition :name="transitionName === 'flip-back' ? 'register-fade-out' : transitionName" mode="out-in"
         @before-enter="beforeEnter" @after-leave="afterLeave">
@@ -1267,7 +1267,7 @@ const onRegister = async () => {
   font-size: 32px;
   font-weight: bold;
   z-index: 3;
-  margin-left: 20rem;
+  margin-left: 16rem;
   margin-top: 5rem;
   text-shadow: 0 0 10px rgba(206, 220, 239, 0.8);
 }
