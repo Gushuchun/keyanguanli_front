@@ -4,7 +4,7 @@
       <div class="navbar-section navbar-brand-section">
         <router-link to="/index" class="navbar-brand">
           <img src="@/assets/image/gdou_logo.png" alt="Logo" class="brand-logo" />
-          <span class="brand-text">科研管理平台</span>
+          <span class="brand-text">双创团队成果管理系统</span>
         </router-link>
         <div class="time-date-display">
           <span class="icon-clock">🕒</span>
@@ -254,7 +254,7 @@ const clearSearch = () => {
 // 获取天气数据
 const getWeather = async () => {
   try {
-    const response = await axios.get('http://gfeljm.tianqiapi.com/api1', {
+    const response = await axios.get('http://gfeljm.tianqiapi.com/api', {
       params: {
         appid: '23562228',
         appsecret: 'eFu7G5yq',
@@ -518,6 +518,7 @@ const themeButtonTitle = computed(() => {
 }
 
 .navbar-brand .brand-text {
+  font-size: 15px;
   transition: opacity 0.2s ease-out;
 }
 

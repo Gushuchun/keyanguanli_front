@@ -1197,15 +1197,19 @@ onMounted(() => {
   border-color: rgba(255, 200, 0, 0.8);
 }
 
-.team-status-modal .team-status-modal .modal-content,
+.team-status-modal .modal-content,
 .team-status-modal .modal-content-dark {
-  margin-top: 5rem;
-  max-width: 100%;
-  width: 100%;
+  max-width: 500px;
+  width: 90%;
   padding: 1.5rem;
   color: #fff;
-  overflow-y: auto;
-  max-height: 80vh;
+  background: linear-gradient(145deg, rgba(0, 15, 26, 0.8), rgba(0, 32, 53, 0.6));
+  border-radius: 20px;
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+  animation: fadeInUp 0.3s ease-in-out;
+  position: relative;
+  max-height: 70vh;
+  overflow-y: auto; /* 添加滚动条 */
   overflow-x: hidden;
 }
 
@@ -1214,10 +1218,9 @@ onMounted(() => {
 }
 
 .member-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.8rem;
-  margin-top: 0.5rem;
+  max-height: 300px; /* 限制最大高度 */
+  overflow-y: auto; /* 添加滚动条 */
+  padding-right: 8px; /* 为滚动条留出空间 */
 }
 
 .member-item {
