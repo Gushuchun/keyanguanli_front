@@ -1064,7 +1064,7 @@ onMounted(() => {
 .modal-content-dark .form-group label {
   color: #00f2fe !important;
   width: 90%;
-  margin: 0 auto;
+  /* margin: 0 auto; */
 }
 
 .modal-content-dark .form-group input {
@@ -1111,7 +1111,7 @@ onMounted(() => {
   margin-bottom: 0.5rem;
   font-weight: 600;
   width: 80%;
-  margin-left: 1.5rem;
+  margin-left: 0.5rem;
 }
 
 .form-group input {
@@ -1131,7 +1131,8 @@ onMounted(() => {
 }
 
 .form-group input[type="file"] {
-  width: 90.5%;
+  margin-left: 20rem;
+  width: 90%;
   padding: 0.7rem;
   border-radius: 10px;
   border: 1px solid rgba(0, 242, 254, 0.3);
@@ -1483,11 +1484,24 @@ textarea {
 .form-group input[type="text"],
 .form-group input[type="date"],
 .form-group input[type="email"],
-.form-group select,
 .form-group textarea {
-  width: 80%;
+  width: 90%;
   /* 从100%改为90% */
-  margin-left: 1.5rem;
+  margin-left: 0.35rem;
+  /* 添加自动外边距实现居中 */
+  padding: 0.8rem;
+  border-radius: 8px;
+  border: 1px solid rgba(0, 242, 254, 0.3);
+  background: #c7c3c3;
+  color: #333;
+  transition: none;
+  resize: vertical;
+}
+
+.form-group select{
+  width: 97%;
+  /* 从100%改为90% */
+  margin-left: 0.35rem;
   /* 添加自动外边距实现居中 */
   padding: 0.8rem;
   border-radius: 8px;
@@ -1504,8 +1518,8 @@ textarea {
 .modal-content-dark .form-group input[type="email"],
 .modal-content-dark .form-group select,
 .modal-content-dark .form-group textarea {
-  width: 85%;
-  margin-left: 1rem;
+  width: 90%;
+  margin-left: 0.35rem;
   margin-top:5px;
 }
 
@@ -1513,7 +1527,7 @@ textarea {
 .form-group input[type="file"] {
   width: 90%;
   /* 从90.5%改为90% */
-  margin: 0.5rem auto 0;
+  margin-left: 0.4rem;
   /* 添加上边距和自动外边距 */
 }
 
@@ -1532,13 +1546,18 @@ select:focus {
 }
 
 /* 白天模式下的样式 */
-.modal-content-dark .form-group select,
-.modal-content .form-group textarea {
+.modal-content-dark .form-group select{
   background: #c7c3c3 !important;
   color: #333 !important;
+  width: 97%!important;
 }
 
-/* 夜间模式下的样式 */
+.modal-content .form-group textarea{
+  background: #c7c3c3 !important;
+  color: #333 !important;
+  width: 89%!important;
+}
+
 .modal-content-dark .form-group select,
 .modal-content-dark .form-group textarea {
   background: rgba(255, 255, 255, 0.1) !important;
