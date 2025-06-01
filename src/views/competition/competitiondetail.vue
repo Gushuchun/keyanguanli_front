@@ -225,7 +225,7 @@
               </div>
               <div class="form-group">
                 <label for="competitionScore">比赛得分:</label>
-                <input type="number" id="competitionScore" v-model="editCompetitionData.score" step="0.01" />
+                <input type="text" id="competitionScore" v-model="editCompetitionData.score" step="0.01" />
               </div>
               <div class="form-group">
                 <label for="competitionFile">比赛文件:</label>
@@ -965,7 +965,18 @@ onMounted(() => {
 }
 
 .modal-content {
-  background: rgba(255, 255, 255, 0.95);
+  /* background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 20px;
+  width: 400px;
+  max-width: 90%;
+  box-shadow: 0 0 30px rgba(0, 242, 254, 0.3);
+  position: relative;
+  animation: fadeIn 0.3s ease-in-out; */
+
+  background: #ffff !important;
+  border: 1px solid rgba(0, 242, 254, 0.2) !important;
+  /* color: #eaeaea !important; */
   padding: 2rem;
   border-radius: 20px;
   width: 400px;
@@ -978,7 +989,7 @@ onMounted(() => {
 /* 缩小修改比赛信息模态框 */
 .edit-competition-modal .modal-content,
 .edit-competition-modal .modal-content-dark {
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(251, 248, 248, 0.8);
   border-radius: 10px;
   padding: 1.5rem; /* 减少内边距 */
   max-width: 400px; /* 减小最大宽度 */
@@ -988,7 +999,7 @@ onMounted(() => {
 
 /* 确保白天模式下标题文字为白色 */
 .edit-competition-modal .modal-content h2 {
-  color: #fff;
+  color: #080808;
   text-align: center;
   margin-bottom: 1.5rem;
 }
@@ -1006,7 +1017,7 @@ onMounted(() => {
 .edit-competition-modal label {
   display: block;
   margin-bottom: 0.5rem;
-  color: #fff;
+  color: #0c0c0c;
 }
 
 .edit-competition-modal input,
@@ -1014,7 +1025,7 @@ onMounted(() => {
   width: 100%;
   padding: 0.5rem;
   border: 1px solid rgba(0, 242, 254, 0.5);
-  background: rgba(0, 0, 0, 0.3);
+  background: #c7c3c3 !important;
   color: #fff;
   border-radius: 5px;
   /* 限制最大宽度和高度 */
@@ -1022,6 +1033,13 @@ onMounted(() => {
   max-height: 200px; 
   resize: vertical; /* 仅允许垂直拉伸 */
 }
+
+.modal-content-dark .form-group textarea {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #333 !important;  /* 保持文字颜色与白天模式一致 */
+  border: 1px solid rgba(0, 242, 254, 0.3) !important;
+}
+
 .edit-competition-modal .modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -1069,7 +1087,8 @@ onMounted(() => {
   color: #00f2fe !important;
 }
 
-.modal-content-dark .form-group input {
+.modal-content-dark .form-group input,
+edit-competition-modal textarea {
   background: rgba(255, 255, 255, 0.1) !important;
   border: 1px solid rgba(0, 242, 254, 0.3) !important;
   color: #fff !important;
@@ -1116,7 +1135,7 @@ onMounted(() => {
   padding: 0.7rem;
   border-radius: 10px;
   border: 1px solid rgba(0, 242, 254, 0.3);
-  background: rgba(128, 128, 128, 0.2);
+  background: #c7c3c3 !important;
   transition: all 0.3s ease;
 }
 

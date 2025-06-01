@@ -1355,7 +1355,7 @@ onMounted(() => {
 }
 
 .form-group input {
-  width: 100%;
+  width: 95%;
   padding: 0.7rem;
   border-radius: 10px;
   border: 1px solid rgba(0, 242, 254, 0.3);

@@ -129,33 +129,33 @@
         </div>
       </Teleport>
 
-      <Teleport to="body">
-        <div v-if="isEditInventorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="hideEditInventorModal">
-            <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>编辑发明人</h2>
-              <form @submit.prevent="updateInventor">
-                <div class="form-group">
-                  <label for="inventorName">姓名:</label>
-                  <input type="text" id="inventorName" v-model="editInventorData.name" required />
-                </div>
-                <div class="form-group">
-                  <label for="inventorPhone">电话:</label>
-                  <input type="text" id="inventorPhone" v-model="editInventorData.phone" required />
-                </div>
-                <div class="form-group">
-                  <label for="inventorEmail">邮箱:</label>
-                  <input type="email" id="inventorEmail" v-model="editInventorData.email" required />
-                </div>
-                <div class="modal-actions">
-                  <button type="submit">保存</button>
-                  <button type="button" @click="hideEditInventorModal">取消</button>
-                </div>
-              </form>
-            </div>
+<Teleport to="body">
+  <div v-if="isEditInventorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
+    <div class="modal-overlay" @click.self="hideEditInventorModal">
+      <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
+        <h2>编辑发明人</h2>
+        <form @submit.prevent="updateInventor" class="edit-inventor-form">
+          <div class="form-group">
+            <label for="inventorName">姓名:</label>
+            <input type="text" id="inventorName" v-model="editInventorData.name" required />
           </div>
-        </div>
-      </Teleport>
+          <div class="form-group">
+            <label for="inventorPhone">电话:</label>
+            <input type="text" id="inventorPhone" v-model="editInventorData.phone" required />
+          </div>
+          <div class="form-group">
+            <label for="inventorEmail">邮箱:</label>
+            <input type="email" id="inventorEmail" v-model="editInventorData.email" required />
+          </div>
+          <div class="modal-actions">
+            <button type="submit">保存</button>
+            <button type="button" @click="hideEditInventorModal">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</Teleport>
 
       <!-- 编辑专利模态框 -->
       <Teleport to="body">
@@ -209,62 +209,62 @@
       </Teleport>
 
       <!-- 编辑申请人模态框 -->
-      <Teleport to="body">
-        <div v-if="isApplicantModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="isApplicantModalVisible = false">
-            <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>编辑申请人信息</h2>
-              <form @submit.prevent="updateApplicant">
-                <div class="form-group">
-                  <label>姓名:</label>
-                  <input type="text" v-model="editApplicantData.name" required />
-                </div>
-                <div class="form-group">
-                  <label>电话:</label>
-                  <input type="text" v-model="editApplicantData.phone" required />
-                </div>
-                <div class="form-group">
-                  <label>邮箱:</label>
-                  <input type="email" v-model="editApplicantData.email" required />
-                </div>
-                <div class="modal-actions">
-                  <button type="submit">保存</button>
-                  <button type="button" @click="isApplicantModalVisible = false">取消</button>
-                </div>
-              </form>
-            </div>
+<Teleport to="body">
+  <div v-if="isApplicantModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
+    <div class="modal-overlay" @click.self="isApplicantModalVisible = false">
+      <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
+        <h2>编辑申请人信息</h2>
+        <form @submit.prevent="updateApplicant" class="applicant-form">
+          <div class="form-group">
+            <label>姓名:</label>
+            <input type="text" v-model="editApplicantData.name" required />
           </div>
-        </div>
-      </Teleport>
+          <div class="form-group">
+            <label>电话:</label>
+            <input type="text" v-model="editApplicantData.phone" required />
+          </div>
+          <div class="form-group">
+            <label>邮箱:</label>
+            <input type="email" v-model="editApplicantData.email" required />
+          </div>
+          <div class="modal-actions">
+            <button type="submit">保存</button>
+            <button type="button" @click="isApplicantModalVisible = false">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</Teleport>
 
       <!-- 添加发明人模态框 -->
-      <Teleport to="body">
-        <div v-if="isInventorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
-          <div class="modal-overlay" @click.self="isInventorModalVisible = false">
-            <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
-              <h2>添加发明人</h2>
-              <form @submit.prevent="addInventor">
-                <div class="form-group">
-                  <label>姓名:</label>
-                  <input type="text" v-model="newInventor.name" required />
-                </div>
-                <div class="form-group">
-                  <label>电话:</label>
-                  <input type="text" v-model="newInventor.phone" required />
-                </div>
-                <div class="form-group">
-                  <label>邮箱:</label>
-                  <input type="email" v-model="newInventor.email" required />
-                </div>
-                <div class="modal-actions">
-                  <button type="submit">添加</button>
-                  <button type="button" @click="isInventorModalVisible = false">取消</button>
-                </div>
-              </form>
-            </div>
+<Teleport to="body">
+  <div v-if="isInventorModalVisible" class="edit-team-modal" :class="{ 'dark': themeStore.isDark }">
+    <div class="modal-overlay" @click.self="isInventorModalVisible = false">
+      <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
+        <h2>添加发明人</h2>
+        <form @submit.prevent="addInventor" class="inventor-form">
+          <div class="form-group">
+            <label>姓名:</label>
+            <input type="text" v-model="newInventor.name" required />
           </div>
-        </div>
-      </Teleport>
+          <div class="form-group">
+            <label>电话:</label>
+            <input type="text" v-model="newInventor.phone" required />
+          </div>
+          <div class="form-group">
+            <label>邮箱:</label>
+            <input type="email" v-model="newInventor.email" required />
+          </div>
+          <div class="modal-actions">
+            <button type="submit">添加</button>
+            <button type="button" @click="isInventorModalVisible = false">取消</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</Teleport>
 
       <div class="background-elements">
         <div class="cyber-circle"></div>
@@ -1063,7 +1063,7 @@ onMounted(() => {
 
 .modal-content-dark .form-group label {
   color: #00f2fe !important;
-  width: 90%;
+  width: 100%;
   /* margin: 0 auto; */
 }
 
@@ -1519,7 +1519,7 @@ textarea {
 .modal-content-dark .form-group select,
 .modal-content-dark .form-group textarea {
   width: 90%;
-  margin-left: 0.35rem;
+  /* margin-left: 0.35rem; */
   margin-top:5px;
 }
 
@@ -1595,7 +1595,7 @@ select:focus {
 .edit-team-modal .form-container {
   flex: 1;
   overflow-y: auto;
-  padding: 0 1.5rem 1.5rem;
+  padding: 0 0.7rem 0.7rem;
   /* 调整内边距 */
   margin-top: -1rem;
   /* 抵消标题的底部内边距 */
@@ -1612,4 +1612,51 @@ select:focus {
   margin-bottom: 0.5rem;
 }
 
+.applicant-form {
+  padding: 0 5px; /* 左右5px边距 */
+}
+
+.applicant-form .form-group {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* 减去左右边距 */
+}
+
+.applicant-form .modal-actions {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* 减去左右边距 */
+}
+
+.inventor-form {
+  padding: 0 5px; /* 左右5px边距 */
+}
+
+.inventor-form .form-group {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* 减去左右边距 */
+}
+
+.inventor-form .modal-actions {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* 减去左右边距 */
+}
+
+.edit-inventor-form {
+  padding: 0 5px; /* 左右5px边距 */
+}
+
+.edit-inventor-form .form-group {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* 减去左右边距 */
+}
+
+.edit-inventor-form .modal-actions {
+  margin-left: 5px;
+  margin-right: 5px;
+  width: calc(100% - 10px); /* 减去左右边距 */
+}
 </style>

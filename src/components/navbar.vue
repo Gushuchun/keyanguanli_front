@@ -254,7 +254,7 @@ const clearSearch = () => {
 // 获取天气数据
 const getWeather = async () => {
   try {
-    const response = await axios.get('http://gfeljm.tianqiapi.com/api', {
+    const response = await axios.get('http://gfeljm.tianqiapi.com/api1', {
       params: {
         appid: '23562228',
         appsecret: 'eFu7G5yq',
@@ -268,11 +268,11 @@ const getWeather = async () => {
   } catch (err) {
     console.error('天气数据获取失败:', err)
     weatherData.value = {
-      tem: '28',
-      wea: '晴',
-      win: '东南风',
+      tem: '32',
+      wea: '阴',
+      win: '西南风',
       win_speed: '3级',
-      city: '北京'
+      city: '阳江'
     }
   }
 }
