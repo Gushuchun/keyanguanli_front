@@ -18,8 +18,8 @@
       <!-- 团队信息 -->
       <div class="section-title">
         团队信息
-        <button v-if="isCaptain  && isUserInTeam" class="inline-edit-button cyber-button primary" @click="showEditTeamModal"
-          data-text="修改团队信息">
+        <button v-if="isCaptain && isUserInTeam" class="inline-edit-button cyber-button primary"
+          @click="showEditTeamModal" data-text="修改团队信息">
           <span class="glow"></span>
           <span class="content">
             <img :src="changeInfoIconSrc" alt="修改团队信息" class="action-icon" />
@@ -44,8 +44,8 @@
       <!-- 学生成员 -->
       <div class="section-title">
         学生成员
-        <button v-if="isCaptain  && isUserInTeam" class="inline-edit-button cyber-button primary" @click="showEditStudentsModal"
-          data-text="编辑学生成员">
+        <button v-if="isCaptain && isUserInTeam" class="inline-edit-button cyber-button primary"
+          @click="showEditStudentsModal" data-text="编辑学生成员">
           <span class="glow"></span>
           <span class="content">
             <img :src="changeInfoIconSrc" alt="编辑学生成员" class="action-icon" />
@@ -71,16 +71,18 @@
             <div :class="themeStore.currentTheme === 'dark' ? 'modal-content-dark' : 'modal-content'">
               <h2>学生成员管理</h2>
 
-              <!-- 成员列表 -->
-              <div class="members-list">
-                <div v-for="student in nonCaptainStudents" :key="student.name" class="member-item">
-                  <img :src="getAvatarUrl(student.avatar)" alt="头像" class="member-avatar" />
-                  <span class="member-name">{{ student.name }}</span>
-                  <button class="remove-button cyber-button secondary" @click="removeStudent(student)">
-                    <span class="content">
-                      <img :src="removememberIconSrc" alt="移除" class="action-icon" />
-                    </span>
-                  </button>
+              <!-- 成员列表容器 -->
+              <div class="members-list-container">
+                <div class="members-list">
+                  <div v-for="student in nonCaptainStudents" :key="student.name" class="member-item">
+                    <img :src="getAvatarUrl(student.avatar)" alt="头像" class="member-avatar" />
+                    <span class="member-name">{{ student.name }}</span>
+                    <button class="remove-button cyber-button secondary" @click="removeStudent(student)">
+                      <span class="content">
+                        <img :src="removememberIconSrc" alt="移除" class="action-icon" />
+                      </span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -128,8 +130,8 @@
       <!-- 教师成员 -->
       <div class="section-title">
         教师成员
-        <button v-if="isCaptain && isUserInTeam" class="inline-edit-button cyber-button primary" @click="showEditTeachersModal"
-          data-text="编辑教师成员">
+        <button v-if="isCaptain && isUserInTeam" class="inline-edit-button cyber-button primary"
+          @click="showEditTeachersModal" data-text="编辑教师成员">
           <span class="glow"></span>
           <span class="content">
             <img :src="changeInfoIconSrc" alt="编辑教师成员" class="action-icon" />
@@ -152,24 +154,19 @@
       <!-- 竞赛历史 -->
       <div class="section-title">竞赛历史</div>
       <div class="competition-grid">
-        <div 
-          v-for="com in teamData.competitions" 
-          :key="com.title" 
-          class="competition-card"
-          @click="goToCompetitionDetail(com.id)"
-          style="cursor: pointer;"
-        >
+        <div v-for="com in teamData.competitions" :key="com.title" class="competition-card"
+          @click="goToCompetitionDetail(com.id)" style="cursor: pointer;">
           <h3>{{ com.title }}</h3>
           <p><strong>日期:</strong> {{ com.date }}</p>
           <p><strong>描述:</strong> {{ com.description }}</p>
           <p><strong>得分:</strong> {{ com.score }}</p>
           <p><strong>获奖时间:</strong> {{ formatDate(com.award_time) }}</p>
           <p :class="{
-              'award-status success': com.score && com.score !== '无' && com.score !== '未评奖',
-              'award-status warning': com.score === '无' || com.score === '未评奖'
-            }">
-              {{ com.score && com.score !== '无' && com.score !== '未评奖' ? '已获奖' : '未评奖' }}
-            </p>
+            'award-status success': com.score && com.score !== '无' && com.score !== '未评奖',
+            'award-status warning': com.score === '无' || com.score === '未评奖'
+          }">
+            {{ com.score && com.score !== '无' && com.score !== '未评奖' ? '已获奖' : '未评奖' }}
+          </p>
         </div>
       </div>
 
@@ -478,9 +475,9 @@ const nonCaptainStudents = computed(() => {
 })
 
 const goToCompetitionDetail = (competitionId) => {
-  router.push({ 
+  router.push({
     name: 'competitionDetail',  // 假设路由名称为 CompetitionDetail
-    params: { id: competitionId } 
+    params: { id: competitionId }
   });
 };
 
@@ -1454,7 +1451,30 @@ onMounted(() => {
 .edit-members-modal .modal-content-dark {
   max-width: 400px;
   width: 90%;
-  padding: 1.5rem;
+  padding: 0; /* 移除内边距，由内部元素控制 */
+  display: flex;
+  flex-direction: column;
+  max-height: 60vh; /* 固定高度 */
+  overflow: hidden; /* 隐藏溢出内容 */
+}
+
+.edit-members-modal h2 {
+  position: sticky;
+  top: 0;
+  background: inherit;
+  padding: 1.5rem 1.5rem 1rem;
+  z-index: 10; /* 确保标题在最上层 */
+  margin: 0;
+  border-bottom: 1px solid rgba(0, 242, 254, 0.2);
+  text-align: center;
+  backdrop-filter: blur(5px); /* 添加模糊效果增强可读性 */
+}
+
+.members-list-container {
+  flex: 1;
+  overflow-y: auto; /* 内容可滚动 */
+  padding: 0 1.5rem 1.5rem; /* 添加内边距 */
+  margin-top: -1rem; /* 抵消标题的底部内边距 */
 }
 
 .members-list {
@@ -1473,6 +1493,7 @@ onMounted(() => {
   padding: 0.8rem;
   border: 1px solid rgba(0, 242, 254, 0.2);
   transition: all 0.3s ease;
+  margin-top: 1rem;
 }
 
 .member-item:hover {
@@ -1521,7 +1542,7 @@ onMounted(() => {
 }
 
 .add-member-button {
-  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
   text-align: center;
 }
 
@@ -1544,6 +1565,7 @@ onMounted(() => {
   max-width: 600px;
   width: 90%;
   padding: 1.5rem;
+  z-index: 3000;
 }
 
 .search-box input {
