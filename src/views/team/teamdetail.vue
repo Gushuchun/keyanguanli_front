@@ -721,8 +721,18 @@ const fetchAllStudents = async () => {
     let response = await infoAPI.getAllStudents()
     let students = response.data || []
 
-    // 过滤掉和当前用户 username 相同的学生
-    allStudents.value = students.filter(s => s.username !== currentUsername)
+    // 获取当前团队中的学生sn列表
+    const teamStudentSns = teamData.value.students?.map(s => s.sn) || []
+    
+    // 过滤条件：
+    // 1. 不是当前用户自己
+    // 2. 不是队长
+    // 3. 不在当前团队中
+    allStudents.value = students.filter(s => 
+      s.username !== currentUsername && 
+      s.sn !== teamData.value.cap && 
+      !teamStudentSns.includes(s.sn)
+    )
 
     filterStudents() // 执行搜索过滤
   } catch (error) {
