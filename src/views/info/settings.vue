@@ -431,7 +431,7 @@ onMounted(() => {
   width: 100%;
   padding: 1rem;
   background: rgba(255, 255, 255, 0.1);
-  border: none;
+  border: 2px solid rgba(0, 242, 254, 0.3);
   border-radius: 6px;
   color: #00f2fe;
   font-family: monospace;

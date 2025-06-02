@@ -234,7 +234,7 @@ const initChart = () => {
       label: {
         show: true,
         position: 'top',
-        color: '#00F7FF',
+        color: '#000000',
         fontSize: 14,
         formatter: '{c}',
         textShadow: '0 0 10px rgba(0, 247, 255, 0.8)'
