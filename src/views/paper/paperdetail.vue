@@ -301,12 +301,12 @@ const updatePaper = async () => {
       formData.append('file', editPaperData.value.file)
     }
 
-    response = await paperAPI.update_paper(paper.value.id, formData, {
+    const response = await paperAPI.update_paper(paper.value.id, formData, {
       headers: {
         'Content-Type': 'multipart/form-data'
       }
     })
-    if (response.status == 200) {
+    if (response.data.code == 200) {
       ElMessage.success('论文信息更新成功')
       isEditModalVisible.value = false
     } else {
